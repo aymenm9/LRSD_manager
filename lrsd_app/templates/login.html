@@ -1,0 +1,36 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    {% if titel %}
+    {{title}}
+    {% else %}
+    Login
+    {% endif %}
+
+{% endblock %}
+
+{% block main %}
+<h1 class="text-center ">Login</h1>
+    <form action="/login_admin" method="post">
+        <div class="input-group mb-3 ">
+            <span class="input-group-text" id="un">user name</span>
+            <input type="text" name="username" id="username" class="form-control "
+                placeholder="Enter username" aria-label="un" aria-describedby="admin user name">
+        </div>
+        <div class="input-group mb-3 ">
+            <span class="input-group-text" id="ps" id="ps">password</span>
+            <input type="password" name="password" id="password" class="form-control "
+                placeholder="Enter password" aria-label="ps" aria-describedby="admin password">
+
+        </div>
+        <button type="submit">Login</button>
+    </form>
+<form action="/login_teacher" method="post">
+    <h2>teacher</h2>
+    <input type="hidden" name="user" value="admin">
+    <input type="text" name="username" id="username" placeholder="user name">
+    <input type="password" name="password" id="password" placeholder="password">
+    <button type="submit">login</button>
+</form>
+
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    {% if titel %}
+    {{title}}
+    {% else %}
+    apology
+    {% endif %}
+
+{% endblock %}
+
+{% block main %}
+<!-- https://memegen.link/ -->
+<!-- https://knowyourmeme.com/memes/grumpy-cat -->
+<!-- https://i.pinimg.com/564x/d6/63/e9/d663e9bdf0eb0ab8642bd0e15c434a53.jpg-->
+<!-- https://i.pinimg.com/564x/8e/47/3e/8e473ed665ed5fe89a8b65cb8e50c5ca.jpg-->
+<!-- https://i.pinimg.com/564x/93/64/a3/9364a3d6de53b8b595689f64dc033896.jpg-->
+<!-- https://i.imgur.com/CsCgN7Ll.png-->
+<img alt="{{ top }}" class="border img-fluid"
+    src="https://api.memegen.link/images/custom/{{ top | urlencode }}/{{ bottom | urlencode }}.jpg?background=https://i.imgur.com/CsCgN7Ll.png&width=400"
+    title="{{ top }}">
+    {% endblock %}
