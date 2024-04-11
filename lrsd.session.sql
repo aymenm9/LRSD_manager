@@ -21,13 +21,15 @@ CREATE TABLE IF NOT EXISTS departments (
 -- Create the teachers table
 CREATE TABLE IF NOT EXISTS teachers (
     id INT PRIMARY KEY AUTO_INCREMENT,
-    first_name VARCHAR(50) NOT NULL,
-    last_name VARCHAR(50) NOT NULL,
-    email VARCHAR(255),
+    username VARCHAR(50) NOT NULL,
     password_hash VARCHAR(255) NOT NULL,
-    mark FLOAT NOT NULL,
-    grade VARCHAR(255) NOT NULL,
+    first_name VARCHAR(50) ,
+    last_name VARCHAR(50) ,
+    email VARCHAR(255),
+    mark FLOAT ,
+    grade VARCHAR(255) ,
     department_id INT DEFAULT NULL,
+    INDEX idx_username (username),
     INDEX idx_department_id (department_id),
     FOREIGN KEY (department_id) REFERENCES departments(id)
 );
@@ -124,3 +126,16 @@ CREATE TABLE IF NOT EXISTS coauthor (
     INDEX idx_article_id (article_id),
     FOREIGN KEY (article_id) REFERENCES articles(id)
 );
+
+-- UPDATE teachers
+ --@block
+ALTER TABLE teachers
+    DROP COLUMN first_name,
+    DROP COLUMN last_name,
+    DROP COLUMN mark,
+    DROP COLUMN grade,
+    ADD COLUMN first_name VARCHAR(50),
+    ADD COLUMN last_name VARCHAR(50),
+    ADD COLUMN mark FLOAT,
+    ADD COLUMN grade VARCHAR(50);
+
