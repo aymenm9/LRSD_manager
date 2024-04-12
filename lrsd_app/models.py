@@ -1,5 +1,6 @@
 from db import db
 from sqlalchemy import Column, Integer, String, Float, ForeignKey
+
 class Admin(db.Model):
     id = Column(Integer, primary_key=True, autoincrement=True)
     username = Column(String(255), nullable=False)

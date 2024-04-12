@@ -3,9 +3,10 @@ from flask_session import Session
 from flask_sqlalchemy import SQLAlchemy
 from models import Admin, Teachers, Departments
 from db import db
-from auth import login_required,admin
+from auth import login_required,admin, login_u
 from apology import apology
 from werkzeug.security import check_password_hash, generate_password_hash
+from exceptions import Password_or_username_none, Pass_user_incorrect
 # app config
 app = Flask(__name__)
 
@@ -51,6 +52,7 @@ def add_teacher():
 
 @app.route("/login")
 def login():
+    session.clear()
     return render_template("login.html")
 
 @app.route("/login_admin", methods=["GET","POST"])
@@ -59,14 +61,11 @@ def login_admin():
     if request.method == "GET":
         redirect("/") 
     else:
-        #todo implement login
-        if not ((username := request.form.get("username")) and (password := request.form.get("password"))):
-            return apology("user or pass is blank!")
-        if not (admin := Admin.query.filter_by(username = username).first()):
-            return apology("user is incorect!")
-        if not check_password_hash(admin.password_hash, password):
-            return apology(" pass is incorect!")
-        session["user_id"] = admin.id
+        try:
+            user = login_u(Admin, request.form.get("username"), request.form.get("password"))
+        except Password_or_username_none or Pass_user_incorrect as e:
+            return apology(e.error["msg"])
+        session["user_id"] = user.id
         session["user_type"] = "admin"
         return redirect('/')
 
@@ -75,13 +74,13 @@ def login_admin():
 def login_teacher():
     session.clear()
     if request.method == "GET":
-        redirect("/") 
+        return redirect("/") 
     else:
-        #todo implement login
-        if not ((username := request.form.get("username")) and (password := request.form.get("password"))):
-            return apology("user or pass is incorect!")
-
-        session["user_id"] = ...
+        try:
+            user = login_u(Teachers, request.form.get("username"), request.form.get("password"))
+        except Password_or_username_none or Pass_user_incorrect as e:
+            return apology(e.error["msg"])
+        session["user_id"] = user.id
         session["user_type"] = "teachers"
         return redirect('/')
 
