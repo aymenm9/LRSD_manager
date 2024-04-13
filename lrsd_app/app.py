@@ -1,4 +1,4 @@
-from flask import Flask , session, render_template, redirect , request
+from flask import Flask , session, render_template, redirect , request, jsonify
 from flask_session import Session
 from flask_sqlalchemy import SQLAlchemy
 from models import Admin, Teachers, Departments
@@ -30,11 +30,11 @@ def index():
 @app.route("/admin_dashboard")
 @login_required
 def admin_dashboard():
-    return render_template("admin_dashboard.html",departments = Departments.query.all())
+    teachers = teachers = Teachers.query.with_entities(Teachers.first_name,Teachers.last_name,Teachers.username ,Teachers.id).all()
+    return render_template("admin_dashboard.html",departments = Departments.query.all(), teachers = teachers)
 
 @app.route("/add_teacher", methods=["GET","POST"])
 @login_required
-
 def add_teacher():
     if request.method == "GET":
         redirect("/")
@@ -48,6 +48,16 @@ def add_teacher():
         db.session.commit()
         return redirect("/")
 
+"""@app.route("/teachers_list")
+def teachers_list():
+    return render_template("teachers_list.html")"""
+
+@app.route("/teachers_list")
+@login_required
+def teachers_list():
+    teachers = Teachers.query.with_entities(Teachers.first_name,Teachers.last_name,Teachers.username).all()
+    return render_template("teachers_list.html", teachers= teachers)
+    
 
 
 @app.route("/login")
@@ -68,7 +78,6 @@ def login_admin():
         session["user_id"] = user.id
         session["user_type"] = "admin"
         return redirect('/')
-
 
 @app.route("/login_teacher", methods=["GET","POST"])
 def login_teacher():

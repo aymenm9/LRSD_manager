@@ -24,3 +24,6 @@ class Teachers(db.Model):
 
     # Relationship definition (optional)
     department = db.relationship('Departments', backref='teachers')
+    @property
+    def full_name(self):
+        return f"{self.first_name} {self.last_name}"
