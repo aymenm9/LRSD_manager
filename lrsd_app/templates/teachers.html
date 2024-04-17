@@ -1,0 +1,7 @@
+<div class="container-sm "> 
+    <ul class="list-group ">
+        {%for teacher in teachers %}
+        <li class="list-group-item ">{{teacher.first_name}} {{teacher.last_name}} {{teacher.username}}</li>
+        {%endfor%}
+    </ul>
+</div>

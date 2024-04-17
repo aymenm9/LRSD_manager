@@ -60,7 +60,7 @@ no titel yet
         <form action="/edit_teacher" method="post">
             <div class="input-group mb-3 ">
 
-                <select name="department" id="department">
+                <select name="teacher" id="department">
                     <option disabled selected>department</option>
                     {% for teacher in teachers %}
                     <option value="{{teacher.id}}">{%if teacher.first_name %}{{teacher.first_name}}{% endif %} {%if

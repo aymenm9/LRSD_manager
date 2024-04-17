@@ -47,17 +47,39 @@ def add_teacher():
         db.session.add(teacher)
         db.session.commit()
         return redirect("/")
-
-"""@app.route("/teachers_list")
-def teachers_list():
-    return render_template("teachers_list.html")"""
+    
+@app.route("/edit_teacher", methods=["GET","POST"])
+@login_required
+def edit_teacher():
+    if request.method == "GET":
+        redirect("/")
+    else:
+        if not(id := request.form.get("teacher")):
+            return apology("one is blank")
+        teacher = Teachers.query.filter_by(Teachers.id == id).first()
+        if username := request.form.get("username"):
+            teacher.username = username
+        if first_name := request.form.get("first_name"):
+            teacher.username = first_name
+        if last_name := request.form.get("last_name"):
+            teacher.username = last_name
+        if password := request.form.get("password"):
+            teacher.username = password
+        db.session.add()
+        db.session.commit()
+        return redirect("/")
+    
 
 @app.route("/teachers_list")
 @login_required
 def teachers_list():
+    return render_template("teachers_list.html")
+
+@app.route("/teachers")
+@login_required
+def teachers():
     teachers = Teachers.query.with_entities(Teachers.first_name,Teachers.last_name,Teachers.username).all()
-    return render_template("teachers_list.html", teachers= teachers)
-    
+    return render_template("teachers.html", teachers= teachers)    
 
 
 @app.route("/login")
