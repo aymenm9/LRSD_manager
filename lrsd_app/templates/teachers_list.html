@@ -8,18 +8,16 @@
     {% endif %}
 
 {% endblock %}
+{% block header %}
+
+{% endblock %}
 {% block main %}
-<div id="teachers"></div>
-<button type="button" id="btn">click</button>
-<script>
-    const list = document.getElementById("teachers");
-    async function getTeachersList(){
-        const result = await fetch ("/teachers")
-        list.innerHTML = result
-        console.dir(result)
-        console.dir(list)
-    }
-    const btn = document.getElementById("btn")
-    btn.addEventListener("click",getTeachersList)
-</script>
+    <div class="container-sm "> 
+        <ul class="list-group ">
+            {%for teacher in teachers %}
+            <li class="list-group-item ">{{teacher.first_name}} {{teacher.last_name}} {{teacher.username}}</li>
+            {%endfor%}
+        </ul>
+    </div>
+
 {% endblock %}
