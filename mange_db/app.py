@@ -1,7 +1,7 @@
 from flask import Flask, session, render_template, redirect, request
 from flask_session import Session
 from flask_sqlalchemy import SQLAlchemy
-from models import Admin, Teachers, Departments
+from models import Admin, Teachers, Departments, Grade
 from db import db
 from werkzeug.security import check_password_hash, generate_password_hash
 
@@ -45,7 +45,17 @@ def add_department():
         db.session.add(new_department)
         db.session.commit()
         return redirect("/")
-
+    
+@app.route("/add_grade", methods=["GET", "POST"])
+def add_grade():
+    if request.method == "GET":
+        return redirect("/")
+    else:
+        grade_ = request.form.get("grade")
+        grade = Grade(grade = grade_)
+        db.session.add(grade)
+        db.session.commit()
+        return redirect("/")
 
 if __name__ == "__main__":
     app.run(debug=True)

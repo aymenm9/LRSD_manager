@@ -139,3 +139,5 @@ ALTER TABLE teachers
     ADD COLUMN mark FLOAT,
     ADD COLUMN grade VARCHAR(50);
 
+--@block
+CREATE TABLE IF NOT EXISTS grade(grade VARCHAR(50));
