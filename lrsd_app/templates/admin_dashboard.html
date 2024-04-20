@@ -55,8 +55,8 @@ no titel yet
 
                 <select name="grade" id="grade">
                     <option disabled selected>grade</option>
-                    {% for grade in grade %}
-                    <option value="{{department.id}}">{{grade.name}}</option>
+                    {% for grade in grades %}
+                    <option value="{{grade.grade}}">{{grade.grade}}</option>
                     {% endfor %}
                 </select>
             </div>

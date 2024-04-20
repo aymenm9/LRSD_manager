@@ -1,7 +1,7 @@
 from flask import Flask , session, render_template, redirect , request, jsonify
 from flask_session import Session
 from flask_sqlalchemy import SQLAlchemy
-from models import Admin, Teachers, Departments
+from models import Admin, Teachers, Departments, Grade
 from db import db
 from auth import login_required, login_u
 from apology import apology
@@ -30,8 +30,8 @@ def index():
 @app.route("/admin_dashboard")
 @login_required
 def admin_dashboard():
-    teachers = teachers = Teachers.query.with_entities(Teachers.first_name,Teachers.last_name,Teachers.username ,Teachers.id).all()
-    return render_template("admin_dashboard.html",departments = Departments.query.all(), teachers = teachers)
+    teachers = Teachers.query.with_entities(Teachers.first_name,Teachers.last_name,Teachers.username ,Teachers.id).all()
+    return render_template("admin_dashboard.html",departments = Departments.query.all(), teachers = teachers, grades = Grade.query.all())
 
 @app.route("/add_teacher", methods=["GET","POST"])
 @login_required
@@ -47,6 +47,11 @@ def add_teacher():
             teacher.first_name = first_name
         if last_name := request.form.get("last_name"):
             teacher.last_name = last_name
+        if grade := request.form.get("grade"):
+            teacher.grade = grade
+        if email := request.form.get("email"):
+            teacher.email = email
+        
         db.session.add(teacher)
         db.session.commit()
         return redirect("/")
@@ -63,7 +68,7 @@ def teachers():
 def teachers_():
     teachers = [{"id":teacher.id, "first_name":teacher.first_name, "last_name":teacher.last_name} 
                 for teacher in Teachers.query.with_entities(Teachers.id, Teachers.first_name, Teachers.last_name)]
-    return render_template("teachers.html", teachers = teachers)
+    return render_template("teachers.html", departments = Departments.query.all(), teachers = teachers, grades = Grade.query.all())
 
 @app.route("/teachers_list")
 @login_required
@@ -79,6 +84,26 @@ def delete_teacher():
     db.session.commit()
     return redirect(request.referrer)
 
+@app.route("/edit_teacher", methods=["POST"])
+@login_required
+def edit_teacher():
+    teacher = Teachers.query.filter_by(id = request.form.get("id")).first()
+    if password := request.form.get("password"):
+        teacher.password = password
+    if username := request.form.get("username") :
+        teacher.username = username
+    if department := request.form.get("department"):
+        teacher.department = department
+    if first_name := request.form.get("first_name"):
+        teacher.first_name = first_name
+    if last_name := request.form.get("last_name"):
+        teacher.last_name = last_name
+    if grade := request.form.get("grade"):
+        teacher.grade = grade
+    if email := request.form.get("email"):
+        teacher.email = email
+    db.session.commit()
+    return redirect(request.referrer)
 
 @app.route("/login")
 def login():
