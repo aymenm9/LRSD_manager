@@ -11,103 +11,83 @@ no titel yet
 <h1 class="text-center ">Admin Dashboard</h1>
 {% block main %}
 <div class="container-md ">
-    <div class="row text-center ">
-        <h2>add teacher</h2>
-        <form action="/add_teacher" method="post">
-            <div class="input-group mb-3 ">
-                <span class="input-group-text" id="un">user name</span>
-                <input type="text" name="username" id="username" class="form-control " placeholder="Enter username"
-                    aria-label="un" aria-describedby="teacher user name">
-            </div>
-
-            <div class="input-group mb-3 ">
-                <span class="input-group-text" id="fn">first name</span>
-                <input type="text" name="first_name" id="first_name" class="form-control "
-                    placeholder="Enter first name" aria-label="fn" aria-describedby="teacher first name">
-            </div>
-            <div class="input-group mb-3 ">
-                <span class="input-group-text" id="ln">last name</span>
-                <input type="text" name="last_name" id="first_name" class="form-control " placeholder="Enter last name"
-                    aria-label="ln" aria-describedby="teacher last name">
-            </div>
-            <div class="input-group mb-3 ">
-                <span class="input-group-text" id="em">email</span>
-                <input type="email" name="email" id="email" class="form-control " placeholder="Enter email(optionl)"
-                    aria-label="em" aria-describedby="teacher email optionl">
-            </div>
-
-            <div class="input-group mb-3 ">
-                <span class="input-group-text" id="ps" id="ps">password</span>
-                <input type="password" name="password" id="password" class="form-control " placeholder="Enter password"
-                    aria-label="ps" aria-describedby="teacher password">
-            </div>
-
-            <div class="input-group mb-3 ">
-
-                <select name="department" id="department">
-                    <option disabled selected>department</option>
-                    {% for department in departments %}
-                    <option value="{{department.id}}">{{department.name}}</option>
-                    {% endfor %}
-                </select>
-            </div>
-            <div class="input-group mb-3 ">
-
-                <select name="grade" id="grade">
-                    <option disabled selected>grade</option>
-                    {% for grade in grades %}
-                    <option value="{{grade.grade}}">{{grade.grade}}</option>
-                    {% endfor %}
-                </select>
-            </div>
-            <button type="submit">ADD teacher</button>
-        </form>
+    <div class="container-sm "> 
+        <ul class="list-group mt-5" id="list2">
+        </ul>
     </div>
-    <div class="row text-center ">
-        <h2>edit teacher</h2>
-        <form action="/edit_teacher" method="post">
-            <div class="input-group mb-3 ">
 
-                <select name="department" id="department">
-                    <option disabled selected>department</option>
-                    {% for teacher in teachers %}
-                    <option value="{{teacher.id}}">{%if teacher.first_name %}{{teacher.first_name}}{% endif %} {%if
-                        teacher.last_name %} {{teacher.last_name}} {% endif %}"{{teacher.username}}"</option>
-                    {% endfor %}
-                </select>
+    <Script>
+        async function teachers_2(){
+            let teachers_response = await fetch("/teachers_");
+            const list2 = document.getElementById("list2");
+            list2.innerHTML = await teachers_response.text() ;
+        }
+        teachers_2();
+    </Script>
+    <p class="lead text-center mt-4 ">
+        <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseWidthExample" aria-expanded="false" aria-controls="collapseWidthExample">
+          Add New Teachers
+        </button>
+    </p>
+      <div style="min-height: 120px;">
+        <div class="collapse" id="collapseWidthExample">
+            <div class="row text-center ">
+                <h2>add teacher</h2>
+                <form action="/add_teacher" method="post">
+                    <div class="input-group mb-3 ">
+                        <span class="input-group-text bg-primary  text-light " id="un">user name</span>
+                        <input type="text" name="username" id="username" class="form-control " placeholder="Enter username"
+                            aria-label="un" aria-describedby="teacher user name">
+                    </div>
+        
+                    <div class="input-group mb-3 ">
+                        <span class="input-group-text bg-primary  text-light " id="fn">first name</span>
+                        <input type="text" name="first_name" id="first_name" class="form-control "
+                            placeholder="Enter first name" aria-label="fn" aria-describedby="teacher first name">
+                    </div>
+                    <div class="input-group mb-3 ">
+                        <span class="input-group-text bg-primary  text-light " id="ln">last name</span>
+                        <input type="text" name="last_name" id="first_name" class="form-control " placeholder="Enter last name"
+                            aria-label="ln" aria-describedby="teacher last name">
+                    </div>
+                    <div class="input-group mb-3 ">
+                        <span class="input-group-text bg-primary  text-light " id="em">email</span>
+                        <input type="email" name="email" id="email" class="form-control " placeholder="Enter email(optionl)"
+                            aria-label="em" aria-describedby="teacher email optionl">
+                    </div>
+        
+                    <div class="input-group mb-3 ">
+                        <span class="input-group-text bg-primary  text-light " id="ps" id="ps">password</span>
+                        <input type="password" name="password" id="password" class="form-control " placeholder="Enter password"
+                            aria-label="ps" aria-describedby="teacher password">
+                    </div>
+        
+                    <div class="input-group mb-3 ">
+        
+                        <select name="department" id="department" class="form-select">
+                            <option disabled selected>department</option>
+                            {% for department in departments %}
+                            <option value="{{department.id}}">{{department.name}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="input-group mb-3 ">
+        
+                        <select name="grade" id="grade" class="form-select">
+                            <option disabled selected>grade</option>
+                            {% for grade in grades %}
+                            <option value="{{grade.grade}}">{{grade.grade}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">ADD teacher</button>
+                </form>
+            </div>
 
-            </div>
-            <div class="input-group mb-3 ">
-                <span class="input-group-text" id="un">user name</span>
-                <input type="text" name="username" id="username" class="form-control " placeholder="Enter username"
-                    aria-label="un" aria-describedby="teacher user name">
-            </div>
 
-            <div class="input-group mb-3 ">
-                <span class="input-group-text" id="fn">first name</span>
-                <input type="text" name="first_name" id="first_name" class="form-control "
-                    placeholder="Enter first name" aria-label="fn" aria-describedby="teacher first name">
-            </div>
-            <div class="input-group mb-3 ">
-                <span class="input-group-text" id="ln">last name</span>
-                <input type="text" name="last_name" id="first_name" class="form-control " placeholder="Enter last name"
-                    aria-label="ln" aria-describedby="teacher last name">
-            </div>
-            <div class="input-group mb-3 ">
-                <span class="input-group-text" id="em">email</span>
-                <input type="email" name="email" id="email" class="form-control " placeholder="Enter email(optionl)"
-                    aria-label="em" aria-describedby="teacher email optionl">
-            </div>
+        </div>
+      </div>
+    
 
-            <div class="input-group mb-3 ">
-                <span class="input-group-text" id="ps" id="ps">password</span>
-                <input type="password" name="password" id="password" class="form-control " placeholder="Enter password"
-                    aria-label="ps" aria-describedby="teacher password">
-            </div>
-
-
-            <button type="submit">edit teacher</button>
-        </form>
-    </div>
 </div>
 {% endblock %}

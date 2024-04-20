@@ -34,3 +34,9 @@ def login_u(user_class,username, password):
     if not check_password_hash(user.password_hash, password):
         raise Pass_user_incorrect({"password": True , "msg":"password is incorect!"})
     return user
+
+def unique_username(username):
+    if Teachers.query.filter_by(username = username).all:
+        return False
+    else:
+        return True

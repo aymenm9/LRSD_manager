@@ -3,7 +3,7 @@ from flask_session import Session
 from flask_sqlalchemy import SQLAlchemy
 from models import Admin, Teachers, Departments, Grade
 from db import db
-from auth import login_required, login_u
+from auth import login_required, login_u, unique_username
 from apology import apology
 from werkzeug.security import check_password_hash, generate_password_hash
 from exceptions import Password_or_username_none, Pass_user_incorrect
@@ -41,7 +41,8 @@ def add_teacher():
     else:
         if not((username := request.form.get("username")) and (password := request.form.get("password")) and (department := request.form.get("department"))):
             return apology("one is blank")
-        
+        if not unique_username(username):
+            return apology("user name all ready existing! ")
         teacher = Teachers(username = username, password_hash = generate_password_hash(password), department_id = department)
         if first_name := request.form.get("first_name"):
             teacher.first_name = first_name
@@ -91,6 +92,8 @@ def edit_teacher():
     if password := request.form.get("password"):
         teacher.password = password
     if username := request.form.get("username") :
+        if not unique_username(username):
+            return apology("user name all ready existing! ")
         teacher.username = username
     if department := request.form.get("department"):
         teacher.department = department
