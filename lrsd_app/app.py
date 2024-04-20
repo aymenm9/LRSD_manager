@@ -3,7 +3,7 @@ from flask_session import Session
 from flask_sqlalchemy import SQLAlchemy
 from models import Admin, Teachers, Departments
 from db import db
-from auth import login_required,admin, login_u
+from auth import login_required, login_u
 from apology import apology
 from werkzeug.security import check_password_hash, generate_password_hash
 from exceptions import Password_or_username_none, Pass_user_incorrect
@@ -42,15 +42,28 @@ def add_teacher():
         if not((username := request.form.get("username")) and (password := request.form.get("password")) and (department := request.form.get("department"))):
             return apology("one is blank")
         
-        if email := request.form.get("email") : 
-            teacher = Teachers(username = username , email = email , password_hash = generate_password_hash(password), department_id = department)
+        teacher = Teachers(username = username, password_hash = generate_password_hash(password), department_id = department)
+        if first_name := request.form.get("first_name"):
+            teacher.first_name = first_name
+        if last_name := request.form.get("last_name"):
+            teacher.last_name = last_name
         db.session.add(teacher)
         db.session.commit()
         return redirect("/")
 
-"""@app.route("/teachers_list")
-def teachers_list():
-    return render_template("teachers_list.html")"""
+@app.route("/teachers")
+@login_required
+def teachers():
+    teachers = [{"id":teacher.id, "first_name":teacher.first_name, "last_name":teacher.last_name} 
+                for teacher in Teachers.query.with_entities(Teachers.id, Teachers.first_name, Teachers.last_name)]
+    return jsonify(teachers)
+
+@app.route("/teachers_")
+@login_required
+def teachers_():
+    teachers = [{"id":teacher.id, "first_name":teacher.first_name, "last_name":teacher.last_name} 
+                for teacher in Teachers.query.with_entities(Teachers.id, Teachers.first_name, Teachers.last_name)]
+    return render_template("teachers.html", teachers = teachers)
 
 @app.route("/teachers_list")
 @login_required
@@ -58,6 +71,13 @@ def teachers_list():
     teachers = Teachers.query.with_entities(Teachers.first_name,Teachers.last_name,Teachers.username).all()
     return render_template("teachers_list.html", teachers= teachers)
     
+@app.route("/delete_teacher", methods=["POST"])
+@login_required
+def delete_teacher():
+    teacher = Teachers.query.filter_by(id = request.form.get("id")).first()
+    db.session.delete(teacher)
+    db.session.commit()
+    return redirect(request.referrer)
 
 
 @app.route("/login")

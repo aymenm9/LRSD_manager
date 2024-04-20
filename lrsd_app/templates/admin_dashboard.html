@@ -50,7 +50,15 @@ no titel yet
                     <option value="{{department.id}}">{{department.name}}</option>
                     {% endfor %}
                 </select>
+            </div>
+            <div class="input-group mb-3 ">
 
+                <select name="grade" id="grade">
+                    <option disabled selected>grade</option>
+                    {% for grade in grade %}
+                    <option value="{{department.id}}">{{grade.name}}</option>
+                    {% endfor %}
+                </select>
             </div>
             <button type="submit">ADD teacher</button>
         </form>

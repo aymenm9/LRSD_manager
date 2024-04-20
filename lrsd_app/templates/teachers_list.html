@@ -13,11 +13,17 @@
 {% endblock %}
 {% block main %}
     <div class="container-sm "> 
-        <ul class="list-group ">
-            {%for teacher in teachers %}
-            <li class="list-group-item ">{{teacher.first_name}} {{teacher.last_name}} {{teacher.username}}</li>
-            {%endfor%}
+        <ul class="list-group " id="list2">
         </ul>
     </div>
+
+    <Script>
+        async function teachers_2(){
+            let teachers_response = await fetch("/teachers_");
+            const list2 = document.getElementById("list2");
+            list2.innerHTML = await teachers_response.text() ;
+        }
+        teachers_2();
+    </Script>
 
 {% endblock %}

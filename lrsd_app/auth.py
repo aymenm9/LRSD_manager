@@ -34,10 +34,3 @@ def login_u(user_class,username, password):
     if not check_password_hash(user.password_hash, password):
         raise Pass_user_incorrect({"password": True , "msg":"password is incorect!"})
     return user
-
-def admin(f):
-    @wraps(f)
-    def decorated_function(*args, **kwargs):
-        if session.get("user_type") != "admin":
-            return redirect("/")
-        return f(*args, **kwargs)
