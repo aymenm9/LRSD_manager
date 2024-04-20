@@ -36,7 +36,7 @@ def login_u(user_class,username, password):
     return user
 
 def unique_username(username):
-    if Teachers.query.filter_by(username = username).all:
+    if Teachers.query.filter_by(username = username).all():
         return False
     else:
         return True

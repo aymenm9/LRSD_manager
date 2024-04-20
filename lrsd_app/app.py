@@ -67,7 +67,11 @@ def teachers():
 @app.route("/teachers_")
 @login_required
 def teachers_():
-    teachers = [{"id":teacher.id, "first_name":teacher.first_name, "last_name":teacher.last_name} 
+    if l := request.args.get("l"):
+        teachers = [{"id":teacher.id, "first_name":teacher.first_name, "last_name":teacher.last_name} 
+            for teacher in Teachers.query.with_entities(Teachers.id, Teachers.first_name, Teachers.last_name).limit(l)] 
+    else:    
+        teachers = [{"id":teacher.id, "first_name":teacher.first_name, "last_name":teacher.last_name} 
                 for teacher in Teachers.query.with_entities(Teachers.id, Teachers.first_name, Teachers.last_name)]
     return render_template("teachers.html", departments = Departments.query.all(), teachers = teachers, grades = Grade.query.all())
 
@@ -96,7 +100,7 @@ def edit_teacher():
             return apology("user name all ready existing! ")
         teacher.username = username
     if department := request.form.get("department"):
-        teacher.department = department
+        teacher.department_id = department
     if first_name := request.form.get("first_name"):
         teacher.first_name = first_name
     if last_name := request.form.get("last_name"):
