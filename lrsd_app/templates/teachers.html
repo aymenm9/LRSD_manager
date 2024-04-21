@@ -1,18 +1,19 @@
-<div class="container-sm ">
-    <ul class="list-group " id="list">
-        {% for teacher in teachers %}
-        <li class="list-group-item ">
-            <div class="row">
-                <div class="col-4 ">{{teacher.first_name}} {{teacher.last_name}}</div>
-                <div class="col-4 ">{% if teacher.mark %} {{teacher.note}} {% else %} N/A {% endif %}</div>
 
-                <div class="col-2">
+    <table class="table table-striped table-hover" id="list">
+        {% for teacher in teachers %}
+        
+            
+            <tr class="row">
+                <td class="col-4 ">{{teacher.first_name}} {{teacher.last_name}} {{teacher.username}}</td>
+                <td class="col-4 ">{% if teacher.mark %} {{teacher.note}} {% else %} N/A {% endif %}</td>
+
+                <td class="col-2">
 
                     <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas"
-                        data-bs-target="#offcanvasScrolling" aria-controls="offcanvasScrolling">Edit</button>
+                        data-bs-target="#{{teacher.first_name}}" aria-controls="{{teacher.first_name}}">Edit</button>
 
                     <div class="offcanvas offcanvas-start" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1"
-                        id="offcanvasScrolling" aria-labelledby="offcanvasScrollingLabel">
+                        id="{{teacher.first_name}}" aria-labelledby="offcanvasScrollingLabel">
                         <div class="offcanvas-header">
                             <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Edit {{teacher.first_name}} {{teacher.last_name}} info</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="offcanvas"
@@ -50,7 +51,7 @@
                                         aria-label="ps" aria-describedby="teacher password">
                                 </div>
                                 <div class="input-group mb-3 ">
-                                    <select name="department" id="department" class="form-select">
+                                    <select name="department" id="{{teacher.username}}" class="form-select">
                                         <option disabled selected>department</option>
                                         {% for department in departments %}
                                         <option value="{{department.id}}">{{department.name}}</option>
@@ -58,7 +59,7 @@
                                     </select>
                                 </div>
                                 <div class="input-group mb-3 ">
-                                    <select name="grade" id="grade" class="form-select">
+                                    <select name="grade" id="{{teacher.username}}" class="form-select">
                                         <option disabled selected>grade</option>
                                         {% for grade in grades %}
                                         <option value="{{grade.grade}}">{{grade.grade}}</option>
@@ -71,22 +72,22 @@
 
                     </div>
                     
-                </div>
+                </td>
 
 
-                <div class="col-2 ">
+                <td class="col-2 ">
                     <!-- Button trigger modal -->
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#delete{{teacher.username}}">
                         delete
                     </button>
 
                     <!-- Modal -->
-                    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                    <div class="modal fade" id="delete{{teacher.username}}" tabindex="-1" aria-labelledby="delete{{teacher.username}}"
                         aria-hidden="true">
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h1 class="modal-title fs-5" id="exampleModalLabel">Are you sure you want to delete
+                                    <h1 class="modal-title fs-5" id="h1{{teacher.username}}">Are you sure you want to delete
                                         {{teacher.first_name}} {{teacher.last_name}}</h1>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal"
                                         aria-label="Close"></button>
@@ -107,11 +108,9 @@
                     </div>
 
 
-                </div>
-            </div>
-        </li>
+                </td>
+            </tr>
         {% endfor %}
         
-    </ul>
+    </table>
 
-</div>
