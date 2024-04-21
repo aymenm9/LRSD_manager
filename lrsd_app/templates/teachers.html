@@ -1,13 +1,12 @@
-
-    <table class="table table-striped table-hover" id="list">
+<div class="container-sm ">
+    <ul class="list-group " id="list">
         {% for teacher in teachers %}
-        
-            
-            <tr class="row">
-                <td class="col-4 ">{{teacher.first_name}} {{teacher.last_name}}</td>
-                <td class="col-4 ">{% if teacher.mark %} {{teacher.note}} {% else %} N/A {% endif %}</td>
+        <li class="list-group-item ">
+            <div class="row">
+                <div class="col-4 ">{{teacher.first_name}} {{teacher.last_name}}</div>
+                <div class="col-4 ">{% if teacher.mark %} {{teacher.note}} {% else %} N/A {% endif %}</div>
 
-                <td class="col-2">
+                <div class="col-2">
 
                     <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas"
                         data-bs-target="#offcanvasScrolling" aria-controls="offcanvasScrolling">Edit</button>
@@ -72,10 +71,10 @@
 
                     </div>
                     
-                </td>
+                </div>
 
 
-                <td class="col-2 ">
+                <div class="col-2 ">
                     <!-- Button trigger modal -->
                     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
                         delete
@@ -108,10 +107,11 @@
                     </div>
 
 
-                </td>
-            </tr>
-
+                </div>
+            </div>
+        </li>
         {% endfor %}
         
-    </table>
+    </ul>
 
+</div>

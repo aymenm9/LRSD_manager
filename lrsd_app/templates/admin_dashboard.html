@@ -12,8 +12,8 @@ no titel yet
 {% block main %}
 <div class="container-md ">
     <div class="container-sm "> 
-        <div class="mt-5" id="list">
-        </div>
+        <ul class="list-group mt-5" id="list">
+        </ul>
         <div class="text-center "><button type="button" id="all" class="btn btn-link mt-2 ">view all</button></div>
         
     </div>
@@ -21,7 +21,7 @@ no titel yet
     <Script>
         async function teachers_(l){
  
-            let teachers_response = await fetch("/teachers?l="+l);
+            let teachers_response = await fetch("/teachers_?l="+l);
             const list2 = document.getElementById("list");
             list2.innerHTML = await teachers_response.text() ;
         }
@@ -29,7 +29,7 @@ no titel yet
         const all = document.getElementById("all");
         all.addEventListener("click",async function(){
             if (all.innerText == "view all"){
-                let teachers_response = await fetch("/teachers");
+                let teachers_response = await fetch("/teachers_");
                 const list2 = document.getElementById("list");
                 list2.innerHTML = await teachers_response.text();
                 all.innerText = "view less"

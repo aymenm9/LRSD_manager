@@ -67,6 +67,7 @@ class ConferenceAssistants(db.Model):
     conference_id = Column(Integer, ForeignKey(Conferences.id), primary_key=True, nullable=False)
     assistant_name = Column(String(255), primary_key=True, nullable=False)
 
+
 class Intervention(db.Model):
     conference_id = Column(Integer, ForeignKey('Conferences.id'), primary_key=True, nullable=False)
     intervention = Column(String(255))
