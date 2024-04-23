@@ -11,51 +11,64 @@ no titel yet
 <h1 class="text-center ">Admin Dashboard</h1>
 {% block main %}
 <div class="container-md ">
-    <div class="container-sm "> 
-        <ul class="list-group mt-5" id="list">
-        </ul>
-        <div class="text-center "><button type="button" id="all" class="btn btn-link mt-2 ">view all</button></div>
-        
-    </div>
+    <div class="input-group my-3 "><input type="search" placeholder="enter the name or username of the teacher"
+            class="form-control " id="search"><button type="button"
+            class="input-group-text btn-primary " id="search_btn">Search</button></div>
+    <div class="container-sm " id="list"> </div>
+
+    <div class="text-center "><button type="button" id="all" class="btn btn-link mt-2 ">view all</button></div>
+
 
     <Script>
-        async function teachers_(l){
- 
-            let teachers_response = await fetch("/teachers_?l="+l);
+        async function teachers_(l) {
+
+            let teachers_response = await fetch("/teachers?l=" + l);
             const list2 = document.getElementById("list");
-            list2.innerHTML = await teachers_response.text() ;
+            list2.innerHTML = await teachers_response.text();
         }
         teachers_(3);
         const all = document.getElementById("all");
-        all.addEventListener("click",async function(){
-            if (all.innerText == "view all"){
-                let teachers_response = await fetch("/teachers_");
+        all.addEventListener("click", async function () {
+            if (all.innerText == "view all") {
+                let teachers_response = await fetch("/teachers");
                 const list2 = document.getElementById("list");
                 list2.innerHTML = await teachers_response.text();
-                all.innerText = "view less"
+                all.innerText = "view less";
             }
-            else{
+            else {
                 teachers_(3);
                 all.innerText = "view all";
             }
         })
+        const searchBtn = document.getElementById("search_btn");
+        const searchInp = document.getElementById("search");
+        [searchBtn, searchInp].forEach(search => search.addEventListener("input",async function(){
+            console.log("adadazdefefafaefaffzeffefl lorem sfefzefefaefz");
+            let teachers_response = await fetch("/teachers?q="+search.value);
+            const list2 = document.getElementById("list");
+            list2.innerHTML = await teachers_response.text();
+            all.innerText = "Cancel";
+
+        }));
+
     </Script>
     <p class="lead text-center mt-4 ">
-        <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseWidthExample" aria-expanded="false" aria-controls="collapseWidthExample">
-          Add New Teachers
+        <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseWidthExample"
+            aria-expanded="false" aria-controls="collapseWidthExample">
+            Add New Teachers
         </button>
     </p>
-      <div style="min-height: 120px;">
+    <div style="min-height: 120px;">
         <div class="collapse" id="collapseWidthExample">
             <div class="row text-center ">
                 <h2>add teacher</h2>
                 <form action="/add_teacher" method="post">
                     <div class="input-group mb-3 ">
                         <span class="input-group-text bg-primary  text-light " id="un">user name</span>
-                        <input type="text" name="username" id="username" class="form-control " placeholder="Enter username"
-                            aria-label="un" aria-describedby="teacher user name">
+                        <input type="text" name="username" id="username" class="form-control "
+                            placeholder="Enter username" aria-label="un" aria-describedby="teacher user name">
                     </div>
-        
+
                     <div class="input-group mb-3 ">
                         <span class="input-group-text bg-primary  text-light " id="fn">first name</span>
                         <input type="text" name="first_name" id="first_name" class="form-control "
@@ -63,23 +76,23 @@ no titel yet
                     </div>
                     <div class="input-group mb-3 ">
                         <span class="input-group-text bg-primary  text-light " id="ln">last name</span>
-                        <input type="text" name="last_name" id="first_name" class="form-control " placeholder="Enter last name"
-                            aria-label="ln" aria-describedby="teacher last name">
+                        <input type="text" name="last_name" id="first_name" class="form-control "
+                            placeholder="Enter last name" aria-label="ln" aria-describedby="teacher last name">
                     </div>
                     <div class="input-group mb-3 ">
                         <span class="input-group-text bg-primary  text-light " id="em">email</span>
-                        <input type="email" name="email" id="email" class="form-control " placeholder="Enter email(optionl)"
-                            aria-label="em" aria-describedby="teacher email optionl">
+                        <input type="email" name="email" id="email" class="form-control "
+                            placeholder="Enter email(optionl)" aria-label="em" aria-describedby="teacher email optionl">
                     </div>
-        
+
                     <div class="input-group mb-3 ">
                         <span class="input-group-text bg-primary  text-light " id="ps" id="ps">password</span>
-                        <input type="password" name="password" id="password" class="form-control " placeholder="Enter password"
-                            aria-label="ps" aria-describedby="teacher password">
+                        <input type="password" name="password" id="password" class="form-control "
+                            placeholder="Enter password" aria-label="ps" aria-describedby="teacher password">
                     </div>
-        
+
                     <div class="input-group mb-3 ">
-        
+
                         <select name="department" id="department" class="form-select">
                             <option disabled selected>department</option>
                             {% for department in departments %}
@@ -88,7 +101,7 @@ no titel yet
                         </select>
                     </div>
                     <div class="input-group mb-3 ">
-        
+
                         <select name="grade" id="grade" class="form-select">
                             <option disabled selected>grade</option>
                             {% for grade in grades %}
@@ -102,8 +115,8 @@ no titel yet
 
 
         </div>
-      </div>
-    
+    </div>
+
 
 </div>
 {% endblock %}

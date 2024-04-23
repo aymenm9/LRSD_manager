@@ -57,19 +57,17 @@ def add_teacher():
         db.session.commit()
         return redirect("/")
 
-@app.route("/teachers")
-@login_required
-def teachers():
-    teachers = [{"id":teacher.id, "first_name":teacher.first_name, "last_name":teacher.last_name} 
-                for teacher in Teachers.query.with_entities(Teachers.id, Teachers.first_name, Teachers.last_name)]
-    return jsonify(teachers)
 
-@app.route("/teachers_")
+
+@app.route("/teachers")
 @login_required
 def teachers_():
     if l := request.args.get("l"):
         teachers = [{"id":teacher.id, "first_name":teacher.first_name, "last_name":teacher.last_name} 
             for teacher in Teachers.query.with_entities(Teachers.id, Teachers.first_name, Teachers.last_name).limit(l)] 
+    elif q := request.args.get("q"):
+        teachers = [{"id":teacher.id, "first_name":teacher.first_name, "last_name":teacher.last_name, "username": teacher.username} 
+                for teacher in Teachers.query.filter((Teachers.first_name + " " +Teachers.last_name).like(f"%{q}%") + Teachers.username.like(f"%{q}%") + (Teachers.last_name + " " + Teachers.first_name).like(f"%{q}%")).with_entities(Teachers.id, Teachers.username, Teachers.first_name, Teachers.last_name)]
     else:    
         teachers = [{"id":teacher.id, "first_name":teacher.first_name, "last_name":teacher.last_name} 
                 for teacher in Teachers.query.with_entities(Teachers.id, Teachers.first_name, Teachers.last_name)]

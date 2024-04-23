@@ -10,10 +10,10 @@
                 <td class="col-2">
 
                     <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas"
-                        data-bs-target="#{{teacher.first_name}}" aria-controls="{{teacher.first_name}}">Edit</button>
+                        data-bs-target="#e{{teacher.id}}" aria-controls="e{{teacher.id}}">Edit</button>
 
                     <div class="offcanvas offcanvas-start" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1"
-                        id="{{teacher.first_name}}" aria-labelledby="offcanvasScrollingLabel">
+                        id="e{{teacher.id}}" aria-labelledby="offcanvasScrollingLabel">
                         <div class="offcanvas-header">
                             <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Edit {{teacher.first_name}} {{teacher.last_name}} info</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="offcanvas"
@@ -51,7 +51,7 @@
                                         aria-label="ps" aria-describedby="teacher password">
                                 </div>
                                 <div class="input-group mb-3 ">
-                                    <select name="department" id="{{teacher.username}}" class="form-select">
+                                    <select name="department" id="{{teacher.id}}" class="form-select">
                                         <option disabled selected>department</option>
                                         {% for department in departments %}
                                         <option value="{{department.id}}">{{department.name}}</option>
@@ -59,7 +59,7 @@
                                     </select>
                                 </div>
                                 <div class="input-group mb-3 ">
-                                    <select name="grade" id="{{teacher.username}}" class="form-select">
+                                    <select name="grade" id="{{teacher.id}}" class="form-select">
                                         <option disabled selected>grade</option>
                                         {% for grade in grades %}
                                         <option value="{{grade.grade}}">{{grade.grade}}</option>
@@ -77,17 +77,17 @@
 
                 <td class="col-2 ">
                     <!-- Button trigger modal -->
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#delete{{teacher.username}}">
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#delete{{teacher.id}}">
                         delete
                     </button>
 
                     <!-- Modal -->
-                    <div class="modal fade" id="delete{{teacher.username}}" tabindex="-1" aria-labelledby="delete{{teacher.username}}"
+                    <div class="modal fade" id="delete{{teacher.id}}" tabindex="-1" aria-labelledby="delete{{teacher.id}}"
                         aria-hidden="true">
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h1 class="modal-title fs-5" id="h1{{teacher.username}}">Are you sure you want to delete
+                                    <h1 class="modal-title fs-5" id="h1{{teacher.id}}">Are you sure you want to delete
                                         {{teacher.first_name}} {{teacher.last_name}}</h1>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal"
                                         aria-label="Close"></button>
