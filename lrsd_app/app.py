@@ -78,6 +78,11 @@ def teachers_():
 def teachers_list():
     teachers = Teachers.query.with_entities(Teachers.first_name,Teachers.last_name,Teachers.username).all()
     return render_template("teachers_list.html", teachers= teachers)
+
+@app.route("/production_list")
+@login_required
+def production_list():
+    return render_template("production_list.html")
     
 @app.route("/delete_teacher", methods=["POST"])
 @login_required
