@@ -25,8 +25,9 @@ def index():
     if session["user_type"] == "admin": 
         return redirect("/admin_dashboard")
     else:
-        return apology("not created yet")
+        return redirect("/teacher_dashboard")
          
+
 @app.route("/admin_dashboard")
 @login_required
 def admin_dashboard():
@@ -114,6 +115,13 @@ def edit_teacher():
         teacher.email = email
     db.session.commit()
     return redirect(request.referrer)
+
+
+@app.route("/teacher_dashboard")
+@login_required
+def teacher_dashboard():
+    
+    return render_template("teacher_dashboard.html")
 
 @app.route("/login")
 def login():

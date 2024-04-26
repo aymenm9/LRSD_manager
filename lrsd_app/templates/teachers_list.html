@@ -1,9 +1,10 @@
 {% extends "admin_dashboard.html" %}
+{% block tech %}active{% endblock %}
 {% block body %}
 <div>
-    <div class="input-group my-3 "><input type="search" placeholder="enter the name or username of the teacher"
+    <div class="input-group my-3 pb-3"><input type="search" placeholder="enter the name or username of the teacher"
             class="form-control " id="search"><button type="button"
-            class="input-group-text btn-primary " id="search_btn">Search</button></div>
+            class="input-group-text btn-primary  " id="search_btn">Search</button></div>
     <div class="container-sm " id="list"> </div>
 
     <div class="text-center "><button type="button" id="all" class="btn btn-link mt-2 ">view all</button></div>
