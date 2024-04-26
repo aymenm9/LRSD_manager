@@ -18,8 +18,8 @@
     <div class="row flex-nowrap ">
       <div class="bg-dark  col-auto col-md-2 px-1 px-md-4 pt-1 pt-md-5   min-vh-100 ">
         <div>
-          <a href="" target="_blank" class=" navbar-brand text-light ">
-            <h1 class="h4 mt-1 d-none d-md-inline">FACULTY OF SCIENCES</h1>
+          <a href="" target="_blank" class=" navbar-brand text-light mt-1 d-none d-md-block">
+            <h4 class="">FACULTY OF SCIENCES</h4>
           </a>
         </div>
         <nav class="nav flex-column nav-underline mt-5 ps-0 ps-md-3  " id="d_nav">
@@ -27,7 +27,7 @@
               class="bi bi-house-door-fill me-2 "></i><span class="d-none d-md-inline ">Dashbord</span></a>
           <a class="nav-link text-light lead {% block tech %}{% endblock %}" href="{% block user %}{% endblock %}" id="teacher"><i
               class="bi bi-person-fill me-2 "></i><span  class="d-none d-md-inline">{% block user_b %}{% endblock %}</span></a>
-          <a class="nav-link text-light lead {% block prod %}{% endblock %}" href="/Productions" id="productions"><i
+          <a class="nav-link text-light lead {% block prod %}{% endblock %}" href="/productions_list" id="productions"><i
               class="bi bi-inboxes-fill me-2"></i><span class="d-none d-md-inline ">Productions</span></a>
           <button type="button" class=" btn bg-danger  nav-link text-light lead h5 mt-5" id="loguot_btn"
             data-bs-toggle="modal" data-bs-target="#logout"><i

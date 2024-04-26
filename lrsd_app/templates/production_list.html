@@ -1,69 +1,80 @@
+{% extends "admin_dashboard.html" %}
+{% block prod %}active{% endblock %}
+{% block body %}
+<div>
+    <!-- add new production -->
+    <div class="row justify-content-start mb-5 ">
+        <div class="col-6 col-md-3  col-lg-2 d-flex  "><i
+                class="bi bi-inboxes-fill  d-flex  align-content-center my-auto me-0  me-md-3  lead "></i>
+            <h2 class="mb-0 ">Productions</h2>
+        </div>
+        <div class="col-2 col-md-4 "> <button class="btn btn-primary lead " type="button" data-bs-toggle="collapse"
+                data-bs-target="#add_production" aria-expanded="false" aria-controls="add_production"> <i
+                    class="bi bi-plus-circle-fill me-3 "></i>
+                <span class=" d-none d-md-inline ">Add New Production</span> 
+            </button></div>
 
-<div class="container-md ">
-    <div class="input-group my-3 "><input type="search" placeholder="enter the name or username of the teacher"
-            class="form-control " id="search"><button type="button"
-            class="input-group-text btn-primary " id="search_btn">Search</button></div>
-    <div class="container-sm " id="list"> </div>
-
-    <div class="text-center "><button type="button" id="all" class="btn btn-link mt-2 ">view all</button></div>
-
-
-    <!-- <Script>
-        async function teachers(l) {
-
-            let teachers_response = await fetch("/production?l=" + l);
-            const list2 = document.getElementById("list");
-            list2.innerHTML = await teachers_response.text();
-        }
-        teachers(3);
-        const all = document.getElementById("all");
-        all.addEventListener("click", async function () {
-            if (all.innerText == "view all") {
-                let teachers_response = await fetch("/production");
-                const list2 = document.getElementById("list");
-                list2.innerHTML = await teachers_response.text();
-                all.innerText = "view less";
-            }
-            else {
-                teachers(3);
-                all.innerText = "view all";
-            }
-        })
-        const searchBtn = document.getElementById("search_btn");
-        const searchInp = document.getElementById("search");
-        [searchBtn, searchInp].forEach(search => search.addEventListener("input",async function(){
-            console.log("adadazdefefafaefaffzeffefl lorem sfefzefefaefz");
-            let teachers_response = await fetch("/production?q="+search.value);
-            const list2 = document.getElementById("list");
-            list2.innerHTML = await teachers_response.text();
-            all.innerText = "Cancel";
-
-        }));
-
-    </Script> -->
-    <p class="lead text-center mt-4 ">
-        <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseWidthExample"
-            aria-expanded="false" aria-controls="collapseWidthExample">
-            Add New Production
-        </button>
-    </p>
-    <div style="min-height: 120px;">
-        <div class="collapse" id="collapseWidthExample">
+    </div>
+        <div class="collapse mb-5 " id="add_production">
             <div class="row text-center ">
-                <h2>add production</h2>
-                <div class="container-fluid ">
-                    <nav class="nav nav-pills nav-justified">
-                        <a class="nav-link active" aria-current="page" href="#">Active</a>
-                        <a class="nav-link" href="#">Much longer nav link</a>
-                        <a class="nav-link" href="#">Link</a>
-                        <a class="nav-link disabled" aria-disabled="true">Disabled</a>
-                      </nav></div>
-                <div class="" id="production"></div>
+                <h2>add a prodction</h2>
             </div>
 
-
+            <Script>
+                async function get_html(url, id, args = "") {
+                    let response = await fetch(url + args);
+                    const elem = document.getElementById(id);
+                    elem.innerHTML = await response.text();
+                }
+                get_html("/add_production","add_production");
+            </Script>
+                <script>
+                    const links = document.querySelectorAll(".nav-item");
+                    console.log("fake cs");
+                    links.forEach(a => 
+                    console.log(a));
+                </script>
         </div>
-    </div>
 
 
-</div>
+    <!-- search for a production -->
+
+
+    <div class="input-group my-3 pb-3"><input type="search" placeholder="enter the name of the production"
+            class="form-control " id="search"><button type="button" class="input-group-text btn-primary  "
+            id="search_btn">Search</button></div>
+    <div class="container-sm " id="list"> </div>
+
+
+    <!-- vew list of production -->
+    <div class="text-center "><button type="button" id="all" class="btn btn-link mt-2 ">view all</button></div>
+    <!-- to be change for production in sted of techers -->
+    <!--<Script>
+        async function get_html(url, id, args = "") {
+            let response = await fetch(url + args);
+            const elem = document.getElementById(id);
+            elem.innerHTML = await response.text();
+            console.log("qdefeefez");
+        }
+        get_html("/teachers", "list", "?l=3");
+        const all = document.getElementById("all");
+        all.addEventListener("click", function () {
+            if (all.innerText == "view all") {
+                all.innerText = "view less";
+                get_html("/teachers", "list");
+            }
+            else {
+                all.innerText = "view all";
+                get_html("/teachers", "list", "?l=3");
+            }
+        });
+        const searchBtn = document.getElementById("search_btn");
+        const searchInp = document.getElementById("search");
+        [searchBtn, searchInp].forEach(search => search.addEventListener("input", function () {
+            get_html("/teachers", "list", "?q=" + search.value);
+            all.innerText = "Cancel";
+        }));
+
+    </Script>-->
+
+</div>{% endblock %}

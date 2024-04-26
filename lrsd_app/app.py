@@ -28,11 +28,31 @@ def index():
         return redirect("/teacher_dashboard")
          
 
+
+
+'''
+ -------------------------------
+ *******************************
+
+        ADMIN  PART
+
+ *******************************
+-------------------------------
+
+'''
+
 @app.route("/admin_dashboard")
 @login_required
 def admin_dashboard():
     teachers = Teachers.query.with_entities(Teachers.first_name,Teachers.last_name,Teachers.username ,Teachers.id).all()
     return render_template("admin_dashboard.html",departments = Departments.query.all(), teachers = teachers, grades = Grade.query.all())
+
+'''
+ -------------------------------
+        MANGE TEACHERS 
+-------------------------------
+
+'''
 
 @app.route("/add_teacher", methods=["GET","POST"])
 @login_required
@@ -58,8 +78,6 @@ def add_teacher():
         db.session.commit()
         return redirect("/")
 
-
-
 @app.route("/teachers")
 @login_required
 def teachers_():
@@ -80,10 +98,6 @@ def teachers_list():
     teachers = Teachers.query.with_entities(Teachers.first_name,Teachers.last_name,Teachers.username).all()
     return render_template("teachers_list.html", teachers= teachers)
 
-@app.route("/production_list")
-@login_required
-def production_list():
-    return render_template("production_list.html")
     
 @app.route("/delete_teacher", methods=["POST"])
 @login_required
@@ -117,12 +131,47 @@ def edit_teacher():
     return redirect(request.referrer)
 
 
+'''
+ -------------------------------
+        MANGE PRODUCTIONS 
+-------------------------------
+
+'''
+
+@app.route("/productions_list")
+@login_required
+def productions_list():
+    return render_template("production_list.html")
+
+
+@app.route("/add_production")
+@login_required
+def add_production():
+    return render_template("add_production.html")
+
+'''
+ -------------------------------
+ *******************************
+
+        TEACHER PART
+
+ *******************************
+-------------------------------
+
+'''
+
 @app.route("/teacher_dashboard")
 @login_required
 def teacher_dashboard():
     
     return render_template("teacher_dashboard.html")
 
+
+
+'''
+login / logout
+
+'''
 @app.route("/login")
 def login():
     session.clear()
