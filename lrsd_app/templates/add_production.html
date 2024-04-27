@@ -1,38 +1,180 @@
-<div class="container-sm ">
-    <div class="row">
-        <nav class="navbar navbar-expand-md " data-bs-theme="light" id="production_nav">
-            <div class="container-fluid d-flex  justify-content-around  ">
-              <button class="navbar-toggler lead " type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span> <span class="lead ">Chose Production Type</span>
-              </button>
-              <div class="collapse navbar-collapse " id="navbarNav">
-                <ul class="navbar-nav d-flex  justify-content-around  w-100 ">
-                  <li class="nav-item">
-                    <a class="nav-link " aria-current="page" href="#polycope">Polycope</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" href="#online_courses">Online Courses</a>
-                  </li>
-                  <li class="nav-item dropdown ">
-                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Supervision</a>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#master">Master</a></li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="#l3">L3</a></li>
-                    </ul>
-                  </li>                  
-                  <li class="nav-item">
-                    <a class="nav-link" href="#conference">Conference</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" href="#article">Article</a>
-                  </li>
+<form action="/add_teacher" method="post">
 
-                </ul>
-              </div>
-            </div>
-          </nav>
+  <!-- select the teacher -->
+  <select class="form-select" aria-label="teacher" required>
+    <option disabled>teacher</option>
+    {% for teacher in teachers %}
+
+    <option value="{{teacehr.id}}" id="{{teacher.id}}">{{teacher.first_name}} {{teacher.last_name}}</option>
+
+    {% endfor %}
+
+  </select>
+  {% if production == "polycopes"%}
+  <!--polycope -->
+  <div id="polycope">
+    <!-- title -->
+    <div class="mb-3" id="d_title">
+      <label for="title" class="form-label">Title</label>
+      <input class="form-control" type="text" id="title" name="title" required>
     </div>
 
+    <!-- pages -->
+    <div class="mb-3" id="d_pages">
+      <label for="pages" class="form-label">nuber of pages</label>
+      <input class="form-control" type="number" id="pages" name="pages" required>
+    </div>
 
-</div>
+    <!-- type -->
+    <select class="form-select" aria-label="type" required>
+      <option disabled>Type</option>
+      <option value="td">TD</option>
+      <option value="tp">TP</option>
+      <option value="cour">Cour</option>
+    </select>
+    <!-- date -->
+    <div class="mb-3" id="d_date">
+      <label for="date" class="form-label">Title</label>
+      <input class="form-control" type="date" id="date" name="date">
+    </div>
+  </div>
+  {% elif production == "online_courses" %}
+  <!-- online course -->
+  <div id="online_course">
+    <!-- title -->
+    <div class="mb-3" id="d_title">
+      <label for="title" class="form-label">Title</label>
+      <input class="form-control" type="text" id="title" name="title" required>
+    </div>
+
+    <!-- url -->
+    <div class="mb-3" id="d_url">
+      <label for="url" class="form-label">Title</label>
+      <input class="form-control" type="url" id="url" name="url" required>
+    </div>
+
+    <!-- date -->
+    <div class="mb-3" id="d_date">
+      <label for="date" class="form-label">Title</label>
+      <input class="form-control" type="date" id="date" name="date">
+    </div>
+  </div>
+
+  {% elif production == "master" %}
+  <!-- master -->
+  <div id="master">
+    <!-- subject -->
+    <div class="mb-3" id="d_subject">
+      <label for="subject" class="form-label">Subject</label>
+      <input class="form-control" type="text" id="subject" name="subject" required>
+    </div>
+
+    <!-- binome 1 -->
+    <div class="mb-3" id="d_binome_1">
+      <label for="binome_1" class="form-label">Binome 1</label>
+      <input class="form-control" type="text" id="binome_1" name="binome_1" required>
+    </div>
+
+    <!-- binome 2 -->
+    <div class="mb-3" id="d_binome_2">
+      <label for="binome_2" class="form-label">Binome 2</label>
+      <input class="form-control" type="text" id="binome_2" name="binome_2">
+    </div>
+
+    <!-- graduation date -->
+    <div class="mb-3" id="d_graduation_date">
+      <label for="graduation_date" class="form-label">Graduation Date</label>
+      <input class="form-control" type="date" id="graduation_date" name="graduation_date" required>
+    </div>
+  </div>
+
+  {% elif production == "l3" %}
+  <!-- l3 -->
+  <div id="l3">
+    <!-- subject -->
+    <div class="mb-3" id="d_subject">
+      <label for="subject" class="form-label">Subject</label>
+      <input class="form-control" type="text" id="subject" name="subject" required>
+    </div>
+
+    <!-- binome 1 -->
+    <div class="mb-3" id="d_binome_1">
+      <label for="binome_1" class="form-label">Binome 1</label>
+      <input class="form-control" type="text" id="binome_1" name="binome_1" required>
+    </div>
+
+    <!-- binome 2 -->
+    <div class="mb-3" id="d_binome_2">
+      <label for="binome_2" class="form-label">Binome 2</label>
+      <input class="form-control" type="text" id="binome_2" name="binome_2">
+    </div>
+  </div>
+
+  {% elif production == "conference" %}
+  <!-- conference -->
+  <div id="conference">
+    <!-- name -->
+    <div class="mb-3" id="d_name">
+      <label for="name" class="form-label">Name</label>
+      <input class="form-control" type="text" id="name" name="name" required>
+    </div>
+
+    <!-- place -->
+    <div class="mb-3" id="d_place">
+      <label for="place" class="form-label">Place</label>
+      <input class="form-control" type="text" id="place" name="place" required>
+    </div>
+
+    <!-- date -->
+    <div class="mb-3" id="d_date">
+      <label for="date" class="form-label">Date</label>
+      <input class="form-control" type="date" id="date" name="date" required>
+    </div>
+
+    <!-- assistants -->
+    <div class="mb-3" id="d_assistants">
+      <label for="assistants" class="form-label">Assistants</label>
+      <input class="form-control" type="text" id="assistants" name="assistants">
+    </div>
+
+    <!-- interventions -->
+    <div class="mb-3" id="d_interventions">
+      <label for="interventions" class="form-label">Interventions</label>
+      <input class="form-control" type="text" id="interventions" name="interventions">
+    </div>
+  </div>
+
+  {% elif production == "article" %}
+  <!-- article -->
+  <div id="article">
+    <!-- title -->
+    <div class="mb-3" id="d_title">
+      <label for="title" class="form-label">Title</label>
+      <input class="form-control" type="text" id="title" name="title" required>
+    </div>
+
+    <!-- date -->
+    <div class="mb-3" id="d_date">
+      <label for="date" class="form-label">Date</label>
+      <input class="form-control" type="date" id="date" name="date" required>
+    </div>
+
+    <!-- pages -->
+    <div class="mb-3" id="d_pages">
+      <label for="pages" class="form-label">Pages</label>
+      <input class="form-control" type="number" id="pages" name="pages">
+    </div>
+
+    <!-- journal -->
+    <div class="mb-3" id="d_journal">
+      <label for="journal" class="form-label">Journal</label>
+      <input class="form-control" type="text" id="journal" name="journal">
+    </div>
+
+    <!-- Coauthors -->
+    <!-- to do in js n of coth-->
+  </div>
+  {% endif %}
+
+  <button type="submit" class="btn btn-primary ">add production</button>
+</form>

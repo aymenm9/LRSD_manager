@@ -3,7 +3,7 @@
 {% block body %}
 <div>
     <!-- add new production -->
-    <div class="row justify-content-start mb-5 ">
+    <div class="row justify-content-between  mb-5 ">
         <div class="col-6 col-md-3  col-lg-2 d-flex  "><i
                 class="bi bi-inboxes-fill  d-flex  align-content-center my-auto me-0  me-md-3  lead "></i>
             <h2 class="mb-0 ">Productions</h2>
@@ -11,35 +11,65 @@
         <div class="col-2 col-md-4 "> <button class="btn btn-primary lead " type="button" data-bs-toggle="collapse"
                 data-bs-target="#add_production" aria-expanded="false" aria-controls="add_production"> <i
                     class="bi bi-plus-circle-fill me-3 "></i>
-                <span class=" d-none d-md-inline ">Add New Production</span> 
+                <span class=" d-none d-md-inline ">Add New Production</span>
             </button></div>
 
     </div>
-        <div class="collapse mb-5 " id="add_production">
-            <div class="row text-center ">
-                <h2>add a prodction</h2>
-            </div>
+    <div class="collapse mb-5 " id="add_production">
+        <div class="row text-center ">
+            <div class="container-sm ">
+                <div class="row">
+                    <nav class="navbar navbar-expand-md " data-bs-theme="light" id="production_nav">
+                        <div class="container-fluid d-flex  justify-content-around  ">
+                            <button class="navbar-toggler lead " type="button" data-bs-toggle="collapse"
+                                data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false"
+                                aria-label="Toggle navigation">
+                                <span class="navbar-toggler-icon"></span> <span class="lead ">Chose Production
+                                    Type</span>
+                            </button>
+                            <div class="collapse navbar-collapse " id="navbarNav">
+                                <ul class="navbar-nav d-flex  justify-content-around  w-100 nav-underline">
+                                    <li class="nav-item">
+                                        <a class="nav-link text-primary active " aria-current="page"
+                                            href="#polycope">Polycope</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="#online_courses">Online Courses</a>
+                                    </li>
+                                    <li class="nav-item dropdown ">
+                                        <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#"
+                                            role="button" aria-expanded="false">Supervision</a>
+                                        <ul class="dropdown-menu">
+                                            <li><a class="dropdown-item" href="#master">Master</a></li>
+                                            <li>
+                                                <hr class="dropdown-divider">
+                                            </li>
+                                            <li><a class="dropdown-item" href="#l3">L3</a></li>
+                                        </ul>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="#conference">Conference</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="#article">Article</a>
+                                    </li>
 
-            <Script>
-                async function get_html(url, id, args = "") {
-                    let response = await fetch(url + args);
-                    const elem = document.getElementById(id);
-                    elem.innerHTML = await response.text();
-                }
-                get_html("/add_production","add_production");
-            </Script>
-                <script>
-                    const links = document.querySelectorAll(".nav-item");
-                    console.log("fake cs");
-                    links.forEach(a => 
-                    console.log(a));
-                </script>
+                                </ul>
+                            </div>
+                        </div>
+                    </nav>
+                </div>
+            </div>
         </div>
+
+        <div class="container-fluid " id="form">
+            
+        </div>
+    </div>
+
 
 
     <!-- search for a production -->
-
-
     <div class="input-group my-3 pb-3"><input type="search" placeholder="enter the name of the production"
             class="form-control " id="search"><button type="button" class="input-group-text btn-primary  "
             id="search_btn">Search</button></div>
@@ -56,25 +86,10 @@
             elem.innerHTML = await response.text();
             console.log("qdefeefez");
         }
-        get_html("/teachers", "list", "?l=3");
-        const all = document.getElementById("all");
-        all.addEventListener("click", function () {
-            if (all.innerText == "view all") {
-                all.innerText = "view less";
-                get_html("/teachers", "list");
-            }
-            else {
-                all.innerText = "view all";
-                get_html("/teachers", "list", "?l=3");
-            }
-        });
-        const searchBtn = document.getElementById("search_btn");
-        const searchInp = document.getElementById("search");
-        [searchBtn, searchInp].forEach(search => search.addEventListener("input", function () {
-            get_html("/teachers", "list", "?q=" + search.value);
-            all.innerText = "Cancel";
-        }));
+
 
     </Script>-->
 
+
+    <Script src="/static/production.js"></Script>
 </div>{% endblock %}

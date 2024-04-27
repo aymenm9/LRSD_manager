@@ -27,9 +27,6 @@ def index():
     else:
         return redirect("/teacher_dashboard")
          
-
-
-
 '''
  -------------------------------
  *******************************
@@ -144,10 +141,12 @@ def productions_list():
     return render_template("production_list.html")
 
 
-@app.route("/add_production")
+@app.route("/add_production", method=["GET","POST"])
 @login_required
 def add_production():
-    return render_template("add_production.html")
+    if request.method == "GET":
+        prod = request.args.get("production") if request.args.get("production") else "polycopes"
+        return render_template("add_production.html", production = prod )
 
 '''
  -------------------------------
@@ -165,8 +164,6 @@ def add_production():
 def teacher_dashboard():
     
     return render_template("teacher_dashboard.html")
-
-
 
 '''
 login / logout

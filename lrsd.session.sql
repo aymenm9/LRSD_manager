@@ -134,10 +134,14 @@ ALTER TABLE teachers
     DROP COLUMN last_name,
     DROP COLUMN mark,
     DROP COLUMN grade,
-    ADD COLUMN first_name VARCHAR(50),
-    ADD COLUMN last_name VARCHAR(50),
-    ADD COLUMN mark FLOAT,
-    ADD COLUMN grade VARCHAR(50);
+    ADD COLUMN IF NOT EXISTS first_name VARCHAR(50),
+    ADD COLUMN IF NOT EXISTS last_name VARCHAR(50),
+    ADD COLUMN IF NOT EXISTS mark FLOAT,
+    ADD COLUMN IF NOT EXISTS grade VARCHAR(50);
 
 --@block
 CREATE TABLE IF NOT EXISTS grade(grade VARCHAR(50));
+
+--@block
+ALTER TABLE teachers 
+    ADD COLUMN IF NOT EXISTS img BLOB;

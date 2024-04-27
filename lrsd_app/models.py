@@ -1,5 +1,5 @@
 from db import db
-from sqlalchemy import Column, Integer, String, Float, ForeignKey, Date, Enum
+from sqlalchemy import Column, Integer, String, Float, ForeignKey, Date, Enum , BLOB
 from abc import ABC
 
 class Admin(db.Model):
@@ -24,8 +24,9 @@ class Teachers(db.Model):
     password_hash = Column(String(255), nullable=False)
     mark = Column(Float)
     grade = Column(String(255))
+    img = Column(BLOB)
     department_id = Column(Integer, ForeignKey(Departments.id), nullable=False)
-
+    
 class Polycopes(db.Model):
     id = Column(Integer, primary_key=True, autoincrement=True)
     title = Column(String(255),nullable=False)
