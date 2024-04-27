@@ -141,11 +141,11 @@ def productions_list():
     return render_template("production_list.html")
 
 
-@app.route("/add_production", method=["GET","POST"])
+@app.route("/add_production", methods=["GET","POST"])
 @login_required
 def add_production():
     if request.method == "GET":
-        prod = request.args.get("production") if request.args.get("production") else "polycopes"
+        prod = request.args.get("p") if request.args.get("p") else "polycopes"
         return render_template("add_production.html", production = prod )
 
 '''
