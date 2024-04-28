@@ -7,15 +7,14 @@ async function get_html(url, id, args = "") {
 
 get_html("/add_production","form","?p=polycopes");
 
-const links = document.querySelectorAll(".nav-item .nav-link");
+const links = document.querySelectorAll(".production");
 console.log("fake cs");
 console.dir(links);
 links.forEach(a => a.addEventListener("click", function () {
     console.log("fake cs2");
     links.forEach(an => an.classList.remove("text-primary", "active"));
     a.classList.add("text-primary", "active");
-    var production = window.location.hash.substring(1);
-    get_html("/add_production","form","?p="+production);
+    get_html("/add_production","form","?p="+a.id);
 
 }));
 

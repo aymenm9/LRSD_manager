@@ -41,8 +41,8 @@ def index():
 @app.route("/admin_dashboard")
 @login_required
 def admin_dashboard():
-    teachers = Teachers.query.with_entities(Teachers.first_name,Teachers.last_name,Teachers.username ,Teachers.id).all()
-    return render_template("admin_dashboard.html",departments = Departments.query.all(), teachers = teachers, grades = Grade.query.all())
+    
+    return render_template("admin_dashboard.html")
 
 '''
  -------------------------------
@@ -92,8 +92,8 @@ def teachers_():
 @app.route("/teachers_list")
 @login_required
 def teachers_list():
-    teachers = Teachers.query.with_entities(Teachers.first_name,Teachers.last_name,Teachers.username).all()
-    return render_template("teachers_list.html", teachers= teachers)
+    teachers = Teachers.query.with_entities(Teachers.first_name,Teachers.last_name,Teachers.username ,Teachers.id).all()
+    return render_template("teachers_list.html",departments = Departments.query.all(), teachers = teachers, grades = Grade.query.all())
 
     
 @app.route("/delete_teacher", methods=["POST"])
@@ -145,8 +145,29 @@ def productions_list():
 @login_required
 def add_production():
     if request.method == "GET":
+        if session["user_type"] == "admin": 
+           teachers = Teachers.query.with_entities( Teachers.id, Teachers.first_name,Teachers.last_name,Teachers.username).all()
+        else:
+            id = session.get("user_id")
+        
         prod = request.args.get("p") if request.args.get("p") else "polycopes"
-        return render_template("add_production.html", production = prod )
+        return render_template("add_production.html", production = prod, teachers= teachers if teachers else None , id = id if id else None )
+    else:
+        match request.form.get("production"):
+            case "polycopes":
+                ...
+            case "online_courses":
+                ...
+            case "master":
+                ...
+            case "l3":
+                ...
+            case "conference":
+                ...
+            case "article":
+                ...
+            case _:
+                return apology("semthin went rowong")
 
 '''
  -------------------------------
@@ -195,7 +216,7 @@ def login_teacher():
         return redirect("/") 
     else:
         try:
-            user = login_u(Teachers, request.form.get("username"), request.form.get("password"))
+            user = Teachers.login(request.form.get("username"), request.form.get("password"))
         except Password_or_username_none or Pass_user_incorrect as e:
             return apology(e.error["msg"])
         session["user_id"] = user.id

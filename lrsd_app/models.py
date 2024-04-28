@@ -2,7 +2,22 @@ from db import db
 from sqlalchemy import Column, Integer, String, Float, ForeignKey, Date, Enum , BLOB
 from abc import ABC
 
-class Admin(db.Model):
+class User(ABC):
+    def __init__(self,username,password):
+        return self.login(username,password)
+    def login(self,username,password):
+        if not (username and password):
+            raise Password_or_username_none()
+        if not (self.__class__.query.filter_by(username = username).first()):
+            raise Pass_user_incorrect({"username": True , "msg":"username is incorect!"})
+        if not check_password_hash(self.password_hash, password):
+            raise Pass_user_incorrect({"password": True , "msg":"password is incorect!"})
+        return self
+
+
+
+
+class Admin(db.Model,User):
     id = Column(Integer, primary_key=True, autoincrement=True)
     username = Column(String(255), nullable=False)
     email = Column(String(255))
@@ -15,7 +30,7 @@ class Departments(db.Model):
 class Grade(db.Model):
     grade = Column(String(50), nullable=False, primary_key=True)
 
-class Teachers(db.Model):
+class Teachers(db.Model,User):
     id = Column(Integer, primary_key=True, autoincrement=True)
     username = Column(String(50), nullable= False)
     first_name = Column(String(50))
