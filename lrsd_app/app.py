@@ -73,7 +73,7 @@ def add_teacher():
         
         db.session.add(teacher)
         db.session.commit()
-        return redirect("/")
+        return redirect("/teachers_list")
 
 @app.route("/teachers")
 @login_required
@@ -145,13 +145,15 @@ def productions_list():
 @login_required
 def add_production():
     if request.method == "GET":
-        if session["user_type"] == "admin": 
+        if session.get("user_type") == "admin": 
            teachers = Teachers.query.with_entities( Teachers.id, Teachers.first_name,Teachers.last_name,Teachers.username).all()
+           id = None
         else:
+            teachers = None
             id = session.get("user_id")
         
         prod = request.args.get("p") if request.args.get("p") else "polycopes"
-        return render_template("add_production.html", production = prod, teachers= teachers if teachers else None , id = id if id else None )
+        return render_template("add_production.html", production = prod, teachers = teachers if teachers else None , id = id if id else None)
     else:
         match request.form.get("production"):
             case "polycopes":
@@ -216,7 +218,7 @@ def login_teacher():
         return redirect("/") 
     else:
         try:
-            user = Teachers.login(request.form.get("username"), request.form.get("password"))
+            user = login_u(Teachers, request.form.get("username"), request.form.get("password"))
         except Password_or_username_none or Pass_user_incorrect as e:
             return apology(e.error["msg"])
         session["user_id"] = user.id
