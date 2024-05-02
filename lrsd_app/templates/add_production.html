@@ -141,13 +141,14 @@
     <!-- assistants -->
     <div class="mb-3" id="d_assistants">
       <label for="assistants" class="form-label">Assistants</label>
-      <input class="form-control" type="text" id="assistants" name="assistants">
+      <input class="form-control" type="text" id="assistants" name="assistants"  placeholder="assistant, assistant,...">
     </div>
 
     <!-- interventions -->
     <div class="mb-3" id="d_interventions">
       <label for="interventions" class="form-label">Interventions</label>
-      <input class="form-control" type="text" id="interventions" name="interventions">
+      <input class="form-control" type="text" id="interventions" name="interventions" placeholder="intervention, intervention,..." required>
+
     </div>
   </div>
 
@@ -179,7 +180,9 @@
     </div>
 
     <!-- Coauthors -->
-    <!-- to do in js n of coth-->
+    <div class="mb-3" id="d_coauthors">
+      <label for="interventions" class="form-label">coauthors</label>
+      <input class="form-control" type="text" id="coauthors" name="coauthors" placeholder="coauthor, coauthor, ...">
   </div>
   {% endif %}
   <input type="hidden" name="production" value="{{production}}">

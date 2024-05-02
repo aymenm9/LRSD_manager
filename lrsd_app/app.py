@@ -2,7 +2,7 @@ from flask import Flask , session, render_template, redirect , request, jsonify
 from flask_session import Session
 from flask_sqlalchemy import SQLAlchemy
 from models import Admin, Teachers, Departments, Grade , Polycopes
-from production import MPolycopes
+from production import Polycope, Master, L3, Conference, Article
 from db import db
 from auth import login_required, login_u, unique_username
 from apology import apology
@@ -159,7 +159,7 @@ def add_production():
         try:
             match request.form.get("production"):
                 case "polycopes":
-                    p = MPolycopes(db,request.form)
+                    p = Polycope(db,request.form)
                     p.add()
                 case "online_courses":
                     ...
