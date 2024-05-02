@@ -2,7 +2,7 @@ from flask import Flask , session, render_template, redirect , request, jsonify
 from flask_session import Session
 from flask_sqlalchemy import SQLAlchemy
 from models import Admin, Teachers, Departments, Grade , Polycopes
-from production import Polycope, Master, L3, Conference, Article
+from production import Polycope, Online_course, Master, L3, Conference, Article
 from db import db
 from auth import login_required, login_u, unique_username
 from apology import apology
@@ -162,15 +162,22 @@ def add_production():
                     p = Polycope(db,request.form)
                     p.add()
                 case "online_courses":
-                    ...
+                    p = Online_course(db,request.form)
+                    p.add()
                 case "master":
-                    ...
+                    p = Master(db,request.form)
+                    p.add()
                 case "l3":
-                    ...
+                    p = L3(db,request.form)
+                    p.add()
                 case "conference":
-                    ...
+                    p = Conference(db,request.form)
+                    p.add()
+                    p.add_extra()
                 case "article":
-                    ...
+                    p = Article(db,request.form)
+                    p.add()
+                    #p.add_extra()
                 case _:
                     return apology("semthin went rowong")
             return redirect(request.referrer)

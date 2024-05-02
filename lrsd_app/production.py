@@ -3,7 +3,7 @@ from abc import ABC,abstractmethod
 from exceptions import Not_user, Erorro_in_inputs
 
 class Production(ABC):
-    def __init__(self, db, par : dict, production = None):
+    def __init__(self, db, par : dict = None, production = None):
         self.db = db
         self.par = par
         self.production = production if production else None
@@ -17,6 +17,8 @@ class Production(ABC):
         #commit to db
         self.db.session.add(self.production)
         self.db.session.commit()
+    
+
 
     @abstractmethod
     def add_self(self):
@@ -32,7 +34,7 @@ class Polycope(Production):
         except:
             raise Erorro_in_inputs
 
-class Online_courses(Production):
+class Online_course(Production):
     def __init__(self, db, par: dict, production=None):
         super().__init__(db, par, production)
 
@@ -65,7 +67,7 @@ class Extra(ABC):
     def __init__(self,db, names, production):
         self.db = db
         self.production = production
-        if name:
+        if names:
             for name in names.split(","):
                 extra = self.add_self(name.strip())
                 self.db.session.add(extra)
@@ -79,39 +81,48 @@ class Assistants (Extra):
     def __init__(self,db, names,production):
         super().__init__(db,names,production)
     def add_self(self,name):
-        return ConferenceAssistants(conference_id = self.production.id , assistant_name = name)
+        return ConferenceAssistants(conference_id = self.production , assistant_name = name)
 
 class Interventions (Extra):
     def __init__(self,db, names,production):
         super().__init__(db,names,production)
     def add_self(self,name):
-        return Intervention(conference_id = self.production.id , intervention = name)
+        return Intervention(conference_id = self.production , intervention = name)
 
 class Coauthors (Extra):
     def __init__(self,db, names,production):
         super().__init__(db,names,production)
+        
     def add_self(self,name):
-        return Coauthor(article_id = self.production.id , name = name)
+        return Coauthor(article_id = self.production , name = name)
 
 class Conference(Production):
     def __init__(self, db, par: dict, production=None):
         super().__init__(db, par, production)
 
+    def add_extra(self):
+        Assistants(self.db, self.par.get("assistants"),self.production.id)
+        Interventions(self.db, self.par.get("interventions"),self.production.id)
     def add_self(self):
-        try:
-            self.production = Conferences(name = self.par.get("name"), place = self.par.get("place"), date =self.par.get("date"), teacher_id =self.par.get("teacher_id"))
-            Assistants(self.db, self.par.get("assistants"),self.production)
-            Interventions(self.db, self.par.get("interventions"),self.production)
-                
-        except:
-            raise Erorro_in_inputs
+        #try:
+        self.production = Conferences(name = self.par.get("name"), place = self.par.get("place"), date =self.par.get("date"), teacher_id =self.par.get("teacher_id"))
+        #except:
+        #   raise Erorro_in_inputs
 
 class Article(Production):
     def __init__(self, db, par: dict, production=None):
         super().__init__(db, par, production)
+    
+    def add(self):
+        super().add()
+        self.add_extra()
+
+    def add_extra(self):
+        Coauthors(self.db, self.par.get("coauthors"),self.production.id)
+
     def add_self(self):
         try:
-            self.production = Articles(title = self.par.get("title") , pages = self.par.get("pages"),date =self.par.get("journal"), journal = self.par.get("date"), teacher_id =self.par.get("teacher_id"))
-            Coauthor(self.db, self.par.get("coauthors"),self.production)
+            self.production = Articles(title = self.par.get("title") , pages = self.par.get("pages"), journal=self.par.get("journal"), date = self.par.get("date"), teacher_id =self.par.get("teacher_id"))
+            '''Coauthor(self.db, self.par.get("coauthors"),self.production.id)'''
         except:
             raise Erorro_in_inputs

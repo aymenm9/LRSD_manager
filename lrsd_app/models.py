@@ -64,12 +64,14 @@ class Conferences(db.Model):
     teacher_id = Column(Integer,ForeignKey(Teachers.id),nullable=False)
 
 class ConferenceAssistants(db.Model):
-    conference_id = Column(Integer, ForeignKey(Conferences.id), primary_key=True, nullable=False)
-    assistant_name = Column(String(255), primary_key=True, nullable=False)
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    conference_id = Column(Integer, ForeignKey(Conferences.id), nullable=False)
+    assistant_name = Column(String(255), nullable=False)
 
 
 class Intervention(db.Model):
-    conference_id = Column(Integer, ForeignKey('Conferences.id'), primary_key=True, nullable=False)
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    conference_id = Column(Integer, ForeignKey(Conferences.id), nullable=False)
     intervention = Column(String(255))
 
 class Articles(db.Model):
@@ -81,5 +83,6 @@ class Articles(db.Model):
     teacher_id = Column(Integer,ForeignKey(Teachers.id),nullable=False)
 
 class Coauthor(db.Model):
-    article_id = Column(Integer, ForeignKey(Articles.id), primary_key=True, nullable=False)
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    article_id = Column(Integer, ForeignKey(Articles.id), nullable=False)
     name = Column(String(255), primary_key=True, nullable=False)

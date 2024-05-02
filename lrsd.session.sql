@@ -91,13 +91,23 @@ CREATE TABLE IF NOT EXISTS conferences (
     FOREIGN KEY (teacher_id) REFERENCES teachers(id)
 );
 
+--@block
 -- Create the conference_assistants table
 CREATE TABLE IF NOT EXISTS conference_assistants (
+    id INT PRIMARY KEY AUTO_INCREMENT,
     conference_id INT NOT NULL,
     assistant_name VARCHAR(255) NOT NULL,
     INDEX idx_conference_id (conference_id),
     FOREIGN KEY (conference_id) REFERENCES conferences(id)
 );
+
+--@block
+DROP TABLE conference_assistants;
+
+-- conference assistants alert
+--@block
+ALTER TABLE conference_assistants
+    ADD COLUMN id INT PRIMARY KEY AUTO_INCREMENT;
 
 -- Create the intervention table
 CREATE TABLE IF NOT EXISTS intervention (
@@ -106,6 +116,11 @@ CREATE TABLE IF NOT EXISTS intervention (
     INDEX idx_conference_id (conference_id),
     FOREIGN KEY (conference_id) REFERENCES conferences(id)
 );
+
+-- conference intervention alert
+--@block
+ALTER TABLE intervention
+    ADD COLUMN id INT PRIMARY KEY AUTO_INCREMENT;
 
 -- Create the articles table
 CREATE TABLE IF NOT EXISTS articles (
@@ -126,6 +141,11 @@ CREATE TABLE IF NOT EXISTS coauthor (
     INDEX idx_article_id (article_id),
     FOREIGN KEY (article_id) REFERENCES articles(id)
 );
+-- coauthor alert
+--@block
+ALTER TABLE coauthor
+    ADD COLUMN id INT PRIMARY KEY AUTO_INCREMENT;
+
 
 -- UPDATE teachers
  --@block
@@ -139,6 +159,12 @@ ALTER TABLE teachers
     ADD COLUMN IF NOT EXISTS mark FLOAT,
     ADD COLUMN IF NOT EXISTS grade VARCHAR(50);
 
+
+
+
+
+
+
 --@block
 CREATE TABLE IF NOT EXISTS grade(grade VARCHAR(50));
 
@@ -148,3 +174,21 @@ ALTER TABLE teachers
 
 --@block
 SELECT * FROM polycopes;
+
+--@block
+SELECT * FROM online_courses;
+--@block
+SELECT * FROM supervision_l3;
+--@block
+SELECT * FROM supervision_master;
+--@block
+SELECT * FROM conferences JOIN conference_assistants ON conference_assistants.conference_id = conferences.id ;
+--@block
+SELECT * FROM articles;
+--@block
+SELECT * FROM polycopes;
+SELECT * FROM online_courses;
+SELECT * FROM supervision_l3;
+SELECT * FROM supervision_master;
+SELECT * FROM conferences;
+SELECT * FROM articles;
