@@ -1,16 +1,18 @@
-<form action="/add_production" method="post">
+<form action="/add_production" method="post" id="production_form">
   <!-- select the teacher -->
   {% if teachers %}
   <div class="mb-3" id="d_teacher">
     <label for="teacher" class="form-label">Teacher</label>
-  <select class="form-select" aria-label="type" name="teacher" required>
-    <option selected disabled>teacher</option>
+  <select class="form-select" aria-label="teacher" name="teacher_id" id="teacher_id" required>
+    <option selected disabled value="">teacher</option>
     {% for teacher in teachers %}
-    <option value="{{teacher.id}}" id="{{teacher.id}}">{{teacher.first_name}} {{teacher.last_name}}</option>
+    <option value="{{teacher.id}}" id="{{teacher.id}}" name="teacher_id">{{teacher.first_name}} {{teacher.last_name}}</option>
     {% endfor %}
-  </select></div>
+  </select>
+
+</div>
   {% else %}
-  <input type="hidden" name="teacher" value="{{id}}">
+  <input type="hidden" name="teacher_id" value="{{id}}">
   {% endif %}
 
   {% if production == "polycopes"%}
@@ -32,7 +34,7 @@
     <div class="mb-3" id="d_type">
       <label for="type" class="form-label">Type</label>
     <select class="form-select" aria-label="type" name="type" required>
-      <option selected disabled>Type</option>
+      <option selected disabled value="">Type</option>
       <option value="td">TD</option>
       <option value="tp">TP</option>
       <option value="cour">Cour</option>
@@ -181,5 +183,5 @@
   </div>
   {% endif %}
   <input type="hidden" name="production" value="{{production}}">
-  <button type="submit" class="btn btn-primary ">add production</button>
+  <button class="btn btn-primary " id="form_btn" onclick="submitForm()">add production</button>
 </form>

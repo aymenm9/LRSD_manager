@@ -1,44 +1,52 @@
-from models import Teachers
+from models import Teachers, Polycopes
 from abc import ABC,abstractmethod
-from db import db
-from exceptions import not_user
+from exceptions import Not_user, Erorro_in_inputs
 
-class production(ABC):
-    def __init__(self, objct, par : dict, production = None):
+class Production(ABC):
+    def __init__(self, db, par : dict, production = None):
         self.db = db
         self.par = par
-        self.objct = objct
         self.production = production if production else None
 
     def add(self):
         #get teacher 
-        if teacher := Teachers.query.filter_by(id = self.par["teacher_id"]).first():
-            self.par["teacher"] = teacher
-        else:
-            raise not_user({"msg": "teacher don't exist"})
+        if not (Teachers.query.filter(Teachers.id == self.par.get("teacher_id")).first()):
+            raise Not_user({"msg": "teacher don't exist"})
         #selef method 
         self.add_self()
         #commit to db
-        db.session.add(self.production)
-        db.session.commit()
+        self.db.session.add(self.production)
+        self.db.session.commit()
 
     @abstractmethod
     def add_self(self):
         pass
 
-def polycopes(request):
-    ...
+class MPolycopes(Production):
+    def __init__(self, db, par: dict, production=None):
+        super().__init__(db, par, production)
+    
+    def add_self(self):
+        try:
+            self.production = Polycopes(title = self.par.get("title"), pages = self.par.get("pages") , date =self.par.get("date"), type = self.par.get("type"), teacher_id =self.par.get("teacher_id"))
+        except:
+            raise Erorro_in_inputs
 
-def online_courses(request):
-    ...
+class Online_courses(Production):
+    def __init__(self, par: dict, production=None):
+        super().__init__(par, production)
 
-def master(request):
-    ...
-def l3(request):
-    ...
+class Master(Production):
+    def __init__(self, par: dict, production=None):
+        super().__init__(par, production)
+class L3(Production):
+    def __init__(self, par: dict, production=None):
+        super().__init__(par, production)
 
-def conference(request):
-    ...
+class Conference(Production):
+    def __init__(self, par: dict, production=None):
+        super().__init__(par, production)
 
-def article(request):
-    ...
+class Article(Production):
+    def __init__(self, par: dict, production=None):
+        super().__init__(par, production)

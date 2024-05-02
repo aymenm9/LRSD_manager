@@ -1,12 +1,13 @@
 from flask import Flask , session, render_template, redirect , request, jsonify
 from flask_session import Session
 from flask_sqlalchemy import SQLAlchemy
-from models import Admin, Teachers, Departments, Grade
+from models import Admin, Teachers, Departments, Grade , Polycopes
+from production import MPolycopes
 from db import db
 from auth import login_required, login_u, unique_username
 from apology import apology
 from werkzeug.security import check_password_hash, generate_password_hash
-from exceptions import Password_or_username_none, Pass_user_incorrect
+from exceptions import Password_or_username_none, Pass_user_incorrect, Erorro_in_inputs
 # app config
 app = Flask(__name__)
 
@@ -155,21 +156,26 @@ def add_production():
         prod = request.args.get("p") if request.args.get("p") else "polycopes"
         return render_template("add_production.html", production = prod, teachers = teachers if teachers else None , id = id if id else None)
     else:
-        match request.form.get("production"):
-            case "polycopes":
-                ...
-            case "online_courses":
-                ...
-            case "master":
-                ...
-            case "l3":
-                ...
-            case "conference":
-                ...
-            case "article":
-                ...
-            case _:
-                return apology("semthin went rowong")
+        try:
+            match request.form.get("production"):
+                case "polycopes":
+                    p = MPolycopes(db,request.form)
+                    p.add()
+                case "online_courses":
+                    ...
+                case "master":
+                    ...
+                case "l3":
+                    ...
+                case "conference":
+                    ...
+                case "article":
+                    ...
+                case _:
+                    return apology("semthin went rowong")
+            return redirect(request.referrer)
+        except Erorro_in_inputs:
+            return apology("Erorro in the inputs")
 
 '''
  -------------------------------

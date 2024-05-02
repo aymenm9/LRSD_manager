@@ -145,3 +145,6 @@ CREATE TABLE IF NOT EXISTS grade(grade VARCHAR(50));
 --@block
 ALTER TABLE teachers 
     ADD COLUMN IF NOT EXISTS img BLOB;
+
+--@block
+SELECT * FROM polycopes;

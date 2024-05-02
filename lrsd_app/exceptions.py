@@ -9,8 +9,12 @@ class Pass_user_incorrect(Exception):
         self.error = error or {}
         super().__init__()
 
-class not_user(Exception):
+class Not_user(Exception):
     def __init__(self, error : dict) -> None:
         self.error = error or {}
         super().__init__()
-    
+
+class Erorro_in_inputs(Exception):
+    def __init__(self, error : dict) -> None:
+        self.error = error or {}
+        super().__init__()
