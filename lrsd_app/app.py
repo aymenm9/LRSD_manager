@@ -8,6 +8,7 @@ from auth import login_required, login_u, unique_username
 from apology import apology
 from werkzeug.security import check_password_hash, generate_password_hash
 from exceptions import Password_or_username_none, Pass_user_incorrect, Erorro_in_inputs
+from users import CAdmin, Teacher
 # app config
 app = Flask(__name__)
 
@@ -23,10 +24,12 @@ db.init_app(app)
 @app.route('/')
 @login_required
 def index():
-    if session["user_type"] == "admin": 
+    if session["user_type"] is Admin: 
         return redirect("/admin_dashboard")
-    else:
+    elif session["user_type"] is Teachers:
         return redirect("/teacher_dashboard")
+    else:
+        return apology("you are'n allowed hire")
          
 '''
  -------------------------------
@@ -217,11 +220,10 @@ def login_admin():
         redirect("/") 
     else:
         try:
-            user = login_u(Admin, request.form.get("username"), request.form.get("password"))
+            CAdmin(user_name=request.form.get("username"),password=request.form.get("password")).login()
         except Password_or_username_none or Pass_user_incorrect as e:
             return apology(e.error["msg"])
-        session["user_id"] = user.id
-        session["user_type"] = "admin"
+
         return redirect('/')
 
 @app.route("/login_teacher", methods=["GET","POST"])
@@ -231,11 +233,9 @@ def login_teacher():
         return redirect("/") 
     else:
         try:
-            user = login_u(Teachers, request.form.get("username"), request.form.get("password"))
+            Teacher(user_name=request.form.get("username"),password=request.form.get("password")).login()
         except Password_or_username_none or Pass_user_incorrect as e:
             return apology(e.error["msg"])
-        session["user_id"] = user.id
-        session["user_type"] = "teachers"
         return redirect('/')
 
 
