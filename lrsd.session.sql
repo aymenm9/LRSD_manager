@@ -101,9 +101,6 @@ CREATE TABLE IF NOT EXISTS conference_assistants (
     FOREIGN KEY (conference_id) REFERENCES conferences(id)
 );
 
---@block
-DROP TABLE conference_assistants;
-
 -- conference assistants alert
 --@block
 ALTER TABLE conference_assistants
@@ -192,3 +189,33 @@ SELECT * FROM supervision_l3;
 SELECT * FROM supervision_master;
 SELECT * FROM conferences;
 SELECT * FROM articles;
+
+
+-- alert pruductions on delete
+--@block
+ALTER TABLE polycopes
+ADD CONSTRAINT fk_teacher_id_polycopes FOREIGN KEY (teacher_id) REFERENCES teachers(id) ON DELETE CASCADE;
+
+ALTER TABLE online_courses
+ADD CONSTRAINT fk_teacher_id_online_courses FOREIGN KEY (teacher_id) REFERENCES teachers(id) ON DELETE CASCADE;
+
+ALTER TABLE supervision_l3
+ADD CONSTRAINT fk_teacher_id_supervision_l3 FOREIGN KEY (teacher_id) REFERENCES teachers(id) ON DELETE CASCADE;
+
+ALTER TABLE supervision_master
+ADD CONSTRAINT fk_teacher_id_supervision_master FOREIGN KEY (teacher_id) REFERENCES teachers(id) ON DELETE CASCADE;
+
+ALTER TABLE conferences
+ADD CONSTRAINT fk_teacher_id_conferences FOREIGN KEY (teacher_id) REFERENCES teachers(id) ON DELETE CASCADE;
+
+ALTER TABLE articles
+ADD CONSTRAINT fk_teacher_id_articles FOREIGN KEY (teacher_id) REFERENCES teachers(id) ON DELETE CASCADE;
+
+ALTER TABLE conference_assistants
+ADD CONSTRAINT fk_conference_id_conferences FOREIGN KEY (conference_id) REFERENCES conferences(id) ON DELETE CASCADE;
+
+ALTER TABLE intervention
+ADD CONSTRAINT fk_conference_id_intervention FOREIGN KEY (conference_id) REFERENCES conferences(id) ON DELETE CASCADE;
+
+ALTER TABLE coauthor
+ADD CONSTRAINT fk_article_id_coauthor FOREIGN KEY (article_id) REFERENCES articles(id) ON DELETE CASCADE;

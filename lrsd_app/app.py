@@ -61,22 +61,11 @@ def add_teacher():
     if request.method == "GET":
         redirect("/")
     else:
-        if not((username := request.form.get("username")) and (password := request.form.get("password")) and (department := request.form.get("department"))):
-            return apology("one is blank")
-        if not unique_username(username):
-            return apology("user name all ready existing! ")
-        teacher = Teachers(username = username, password_hash = generate_password_hash(password), department_id = department)
-        if first_name := request.form.get("first_name"):
-            teacher.first_name = first_name
-        if last_name := request.form.get("last_name"):
-            teacher.last_name = last_name
-        if grade := request.form.get("grade"):
-            teacher.grade = grade
-        if email := request.form.get("email"):
-            teacher.email = email
-        
-        db.session.add(teacher)
-        db.session.commit()
+        try:
+            Teacher(par=request.form).add()
+        except:
+            apology("user name all ready exist")
+
         return redirect("/teachers_list")
 
 @app.route("/teachers")
@@ -103,9 +92,7 @@ def teachers_list():
 @app.route("/delete_teacher", methods=["POST"])
 @login_required
 def delete_teacher():
-    teacher = Teachers.query.filter_by(id = request.form.get("id")).first()
-    db.session.delete(teacher)
-    db.session.commit()
+    Teacher(par=request.form).delete()
     return redirect(request.referrer)
 
 @app.route("/edit_teacher", methods=["POST"])
@@ -176,11 +163,9 @@ def add_production():
                 case "conference":
                     p = Conference(db,request.form)
                     p.add()
-                    p.add_extra()
                 case "article":
                     p = Article(db,request.form)
                     p.add()
-                    #p.add_extra()
                 case _:
                     return apology("semthin went rowong")
             return redirect(request.referrer)

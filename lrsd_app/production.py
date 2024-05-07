@@ -18,10 +18,18 @@ class Production(ABC):
         db.session.add(self.production)
         db.session.commit()
     
+    @staticmethod
+    def delete_all(teacher_id):
+        for production in  Production.__subclasses__():
+            production.delete(teacher_id)
 
 
     @abstractmethod
     def add_self(self):
+        pass
+    @staticmethod
+    @abstractmethod
+    def delete(teacher_id):
         pass
 
 class Polycope(Production):
@@ -33,7 +41,13 @@ class Polycope(Production):
             self.production = Polycopes(title = self.par.get("title"), pages = self.par.get("pages"), date =self.par.get("date"), type = self.par.get("type"), teacher_id =self.par.get("teacher_id"))
         except:
             raise Erorro_in_inputs
-
+    
+    @staticmethod
+    def delete_all(teacher_id):
+        for pol in Polycopes.query.filter_by(teacher_id = teacher_id).all():
+            db.session.delete(pol)
+        db.session.commit()
+    
 class Online_course(Production):
     def __init__(self,par: dict, production=None):
         super().__init__(par, production)
@@ -42,7 +56,13 @@ class Online_course(Production):
         try:
             self.production = OnlineCourses(title = self.par.get("title"), date =self.par.get("date"), url = self.par.get("url") ,teacher_id =self.par.get("teacher_id"))
         except:
-            raise Erorro_in_inputs 
+            raise Erorro_in_inputs
+        
+    @staticmethod
+    def delete_all(teacher_id):
+        for pol in OnlineCourses.query.filter_by(teacher_id = teacher_id).all():
+            db.session.delete(pol)
+        db.session.commit()
 
 class Master(Production):
     def __init__(self, par: dict, production=None):
@@ -53,6 +73,13 @@ class Master(Production):
             self.production = SupervisionMaster(subject = self.par.get("subject"), binome_1 = self.par.get("binome_1"), binome_2 = self.par.get("binome_2") if self.par.get("binome_2") else None, graduation_date = self.par.get("graduation_date")  , teacher_id =self.par.get("teacher_id"))
         except:
             raise Erorro_in_inputs
+        
+    @staticmethod
+    def delete_all(teacher_id):
+        for pol in SupervisionMaster.query.filter_by(teacher_id = teacher_id).all():
+            db.session.delete(pol)
+        db.session.commit()
+
 class L3(Production):
     def __init__(self, par: dict, production=None):
         super().__init__(par, production)
@@ -62,6 +89,12 @@ class L3(Production):
             self.production = SupervisionL3(subject = self.par.get("subject"), binome_1 = self.par.get("binome_1"), binome_2 = self.par.get("binome_2") if self.par.get("binome_2") else None , teacher_id =self.par.get("teacher_id"))
         except:
             raise Erorro_in_inputs
+    
+    @staticmethod
+    def delete_all(teacher_id):
+        for pol in SupervisionL3.query.filter_by(teacher_id = teacher_id).all():
+            db.session.delete(pol)
+        db.session.commit()
 
 class Extra(ABC):
     def __init__(self, names, production):
@@ -98,15 +131,17 @@ class Coauthors (Extra):
 class Conference(Production):
     def __init__(self,   par: dict, production=None):
         super().__init__(  par, production)
-
+    def add(self):
+        super().add()
+        self.add_extra()
     def add_extra(self):
         Assistants( self.par.get("assistants"),self.production.id)
         Interventions(self.par.get("interventions"),self.production.id)
     def add_self(self):
-        #try:
-        self.production = Conferences(name = self.par.get("name"), place = self.par.get("place"), date =self.par.get("date"), teacher_id =self.par.get("teacher_id"))
-        #except:
-        #   raise Erorro_in_inputs
+        try:
+            self.production = Conferences(name = self.par.get("name"), place = self.par.get("place"), date =self.par.get("date"), teacher_id =self.par.get("teacher_id"))
+        except:
+           raise Erorro_in_inputs
 
 class Article(Production):
     def __init__(self,   par: dict, production=None):

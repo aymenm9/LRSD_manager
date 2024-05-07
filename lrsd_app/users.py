@@ -37,8 +37,35 @@ class CAdmin(User):
         return Admin
     
 class Teacher(User):
-    def __init__(self, *, id=None, user_name=None, password=None) -> None:
+    def __init__(self, *, id=None, user_name=None, password=None, par = None) -> None:
         super().__init__(id=id, user_name=user_name, password=password)
+        self.par = par
     
     def myclass(self):
         return Teachers
+    
+    def add(self):
+        if not (self.par.get("username") and self.unique_username() and self.par.get("password") and self.par.get("department")) :
+            raise Not_user
+        self.teacher = Teachers(username = self.par.get("username") , password_hash = generate_password_hash(self.par.get("password")), department_id = self.par.get("department"))
+        if self.par.get("first_name"):
+            self.teacher.first_name = self.par.get("first_name")
+        if self.par.get("last_name"):
+            self.teacher.last_name = self.par.get("last_name")
+        if self.par.get("grade"):
+            self.teacher.grade = self.par.get("grade")
+        if self.par.form.get("email"):
+            self.teacher.email = self.par.form.get("email")
+        db.session.add(self.teacher)
+        db.session.commit()
+    
+    def delete(self):
+        self.teacher = Teachers.query.filter_by(id = self.par.get("id")).first()
+        db.session.delete(self.teacher)
+        db.session.commit()
+
+    def unique_username(self):
+        if Teachers.query.filter_by(username = self.par.get("username")).all():
+            return False
+        else:
+            return True
