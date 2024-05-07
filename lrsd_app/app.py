@@ -4,10 +4,10 @@ from flask_sqlalchemy import SQLAlchemy
 from models import Admin, Teachers, Departments, Grade , Polycopes
 from production import Polycope, Online_course, Master, L3, Conference, Article
 from db import db
-from auth import login_required, login_u, unique_username
+from auth import login_required, login_u
 from apology import apology
 from werkzeug.security import check_password_hash, generate_password_hash
-from exceptions import Password_or_username_none, Pass_user_incorrect, Erorro_in_inputs
+from exceptions import Password_or_username_none, Pass_user_incorrect, Erorro_in_inputs,Not_user
 from users import CAdmin, Teacher
 # app config
 app = Flask(__name__)
@@ -64,7 +64,7 @@ def add_teacher():
         try:
             Teacher(par=request.form).add()
         except:
-            apology("user name all ready exist")
+            return apology("user name all ready exist")
 
         return redirect("/teachers_list")
 
@@ -98,24 +98,13 @@ def delete_teacher():
 @app.route("/edit_teacher", methods=["POST"])
 @login_required
 def edit_teacher():
-    teacher = Teachers.query.filter_by(id = request.form.get("id")).first()
-    if password := request.form.get("password"):
-        teacher.password = password
-    if username := request.form.get("username") :
-        if not unique_username(username):
-            return apology("user name all ready existing! ")
-        teacher.username = username
-    if department := request.form.get("department"):
-        teacher.department_id = department
-    if first_name := request.form.get("first_name"):
-        teacher.first_name = first_name
-    if last_name := request.form.get("last_name"):
-        teacher.last_name = last_name
-    if grade := request.form.get("grade"):
-        teacher.grade = grade
-    if email := request.form.get("email"):
-        teacher.email = email
-    db.session.commit()
+
+    try:
+        Teacher(par=request.form)
+    except Not_user:
+        return apology("username all ready exixst!")
+    except:
+        return apology("sommethin go ronge!")
     return redirect(request.referrer)
 
 

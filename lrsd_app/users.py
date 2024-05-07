@@ -64,6 +64,25 @@ class Teacher(User):
         db.session.delete(self.teacher)
         db.session.commit()
 
+    def edit(self):
+        self.teacher = Teachers.query.filter_by(id = self.par.get("id")).first()
+        if password := self.par.get("password"):
+            self.teacher.password = password
+        if username := self.par.get("username") :
+            if not self.unique_username(username):
+                raise Not_user
+            self.teacher.username = username
+        if department := self.par.get("department"):
+            self.teacher.department_id = department
+        if first_name := self.par.get("first_name"):
+            self.teacher.first_name = first_name
+        if last_name := self.par.get("last_name"):
+            self.teacher.last_name = last_name
+        if grade := self.par.get("grade"):
+            self.teacher.grade = grade
+        if email := self.par.get("email"):
+            self.teacher.email = email
+        db.session.commit()
     def unique_username(self):
         if Teachers.query.filter_by(username = self.par.get("username")).all():
             return False
