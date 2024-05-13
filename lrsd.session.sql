@@ -219,3 +219,13 @@ ADD CONSTRAINT fk_conference_id_intervention FOREIGN KEY (conference_id) REFEREN
 
 ALTER TABLE coauthor
 ADD CONSTRAINT fk_article_id_coauthor FOREIGN KEY (article_id) REFERENCES articles(id) ON DELETE CASCADE;
+
+
+
+-- teachers list
+--@block
+SELECT id, username, first_name, last_name, img FROM teachers WHERE WHERE (first_name LIKE '%{name}%' OR last_name LIKE '%{name}%' OR username LIKE '%{name}%' OR first_name + ' ' + last_name LIKE '%{name}%' OR last_name + ' ' +  first_name LIKE '%{name}%');
+
+
+--@block
+SELECT * FROM teachers;

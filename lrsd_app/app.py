@@ -1,10 +1,10 @@
 from flask import Flask , session, render_template, redirect , request, jsonify
 from flask_session import Session
 from flask_sqlalchemy import SQLAlchemy
-from models import Admin, Teachers, Departments, Grade , Polycopes
-from production import Polycope, Online_course, Master, L3, Conference, Article
+from models import Admin, Teachers, Departments, Grade , Polycopes,OnlineCourses,SupervisionMaster,SupervisionL3,Conferences,Articles
+from production import Polycope, Online_course, Master, L3, Conference, Article,Production
 from db import db
-from auth import login_required, login_u
+from auth import login_required,login_admin
 from apology import apology
 from werkzeug.security import check_password_hash, generate_password_hash
 from exceptions import Password_or_username_none, Pass_user_incorrect, Erorro_in_inputs,Not_user
@@ -30,7 +30,49 @@ def index():
         return redirect("/teacher_dashboard")
     else:
         return apology("you are'n allowed hire")
-         
+
+'''
+mange db and app
+'''
+@app.route("/add_admin", methods=["GET", "POST"])
+@login_admin
+def add_admin():
+    if request.method == "GET":
+        return redirect("/")
+    else:
+        username = request.form.get("username")
+        password = request.form.get("password")
+        email = request.form.get("email")
+        new_admin = Admin(username=username, email=email, password_hash=generate_password_hash(password))
+        db.session.add(new_admin)
+        db.session.commit()
+        return redirect("/")
+
+@app.route("/add_department", methods=["GET", "POST"])
+@login_admin
+def add_department():
+    if request.method == "GET":
+        return redirect("/")
+    else:
+        name = request.form.get("name")
+        new_department = Departments(name = name)
+        db.session.add(new_department)
+        db.session.commit()
+        return redirect("/")
+    
+@app.route("/add_grade", methods=["GET", "POST"])
+@login_admin
+def add_grade():
+    if request.method == "GET":
+        return redirect("/")
+    else:
+        grade_ = request.form.get("grade")
+        grade = Grade(grade = grade_)
+        db.session.add(grade)
+        db.session.commit()
+        return redirect("/")
+
+
 '''
  -------------------------------
  *******************************
@@ -46,7 +88,7 @@ def index():
 @login_required
 def admin_dashboard():
     
-    return render_template("admin_dashboard.html")
+    return render_template("dashboard.html")
 
 '''
  -------------------------------
@@ -71,15 +113,9 @@ def add_teacher():
 @app.route("/teachers")
 @login_required
 def teachers_():
-    if l := request.args.get("l"):
-        teachers = [{"id":teacher.id, "first_name":teacher.first_name, "last_name":teacher.last_name} 
-            for teacher in Teachers.query.with_entities(Teachers.id, Teachers.first_name, Teachers.last_name).limit(l)] 
-    elif q := request.args.get("q"):
-        teachers = [{"id":teacher.id, "first_name":teacher.first_name, "last_name":teacher.last_name, "username": teacher.username} 
-                for teacher in Teachers.query.filter((Teachers.first_name + " " +Teachers.last_name).like(f"%{q}%") + Teachers.username.like(f"%{q}%") + (Teachers.last_name + " " + Teachers.first_name).like(f"%{q}%")).with_entities(Teachers.id, Teachers.username, Teachers.first_name, Teachers.last_name)]
-    else:    
-        teachers = [{"id":teacher.id, "first_name":teacher.first_name, "last_name":teacher.last_name} 
-                for teacher in Teachers.query.with_entities(Teachers.id, Teachers.first_name, Teachers.last_name)]
+    teachers = [{"id":teacher.id, "first_name":teacher.first_name, "last_name":teacher.last_name, "username": teacher.username, "department": Departments.query.filter(Departments.id == teacher.department_id).with_entities(Departments.name).first().name}
+                for teacher in Teachers.query.with_entities(Teachers.id, Teachers.first_name, Teachers.last_name, Teachers.username, Teachers.department_id)]    
+
     return render_template("teachers.html", departments = Departments.query.all(), teachers = teachers, grades = Grade.query.all())
 
 @app.route("/teachers_list")
@@ -98,15 +134,22 @@ def delete_teacher():
 @app.route("/edit_teacher", methods=["POST"])
 @login_required
 def edit_teacher():
-
     try:
-        Teacher(par=request.form)
+        Teacher(par=request.form).edit()
     except Not_user:
         return apology("username all ready exixst!")
-    except:
-        return apology("sommethin go ronge!")
+    '''except:
+        return apology("sommethin go ronge!")'''
     return redirect(request.referrer)
 
+@app.route("/profile")
+def profile():
+    if request.args.get("user"):
+        if teacher := Teacher.teacher_profile(request.args.get("user")):
+            productions = Production.by_teacher(teacher["id"])
+            return render_template("profile.html",teacher = teacher, productions = productions)
+    
+    return apology("something go wrowng ")
 
 '''
  -------------------------------
@@ -120,12 +163,22 @@ def edit_teacher():
 def productions_list():
     return render_template("production_list.html")
 
+@app.route("/productions")
+@login_required
+def productions():
+    if session.get("user_type") is Teachers:
+        query =Production.by_teacher(session.get("user_id"))
+        user = "teacher"
+    else:
+        query = Production.all()
+        user = "admin"
+    return render_template("productions.html", productions = query,user = user )
 
 @app.route("/add_production", methods=["GET","POST"])
 @login_required
 def add_production():
     if request.method == "GET":
-        if session.get("user_type") == "admin": 
+        if session.get("user_type") is Admin: 
            teachers = Teachers.query.with_entities( Teachers.id, Teachers.first_name,Teachers.last_name,Teachers.username).all()
            id = None
         else:
@@ -138,28 +191,80 @@ def add_production():
         try:
             match request.form.get("production"):
                 case "polycopes":
-                    p = Polycope(db,request.form)
+                    p = Polycope(request.form)
                     p.add()
                 case "online_courses":
-                    p = Online_course(db,request.form)
+                    p = Online_course(request.form)
                     p.add()
                 case "master":
-                    p = Master(db,request.form)
+                    p = Master(request.form)
                     p.add()
                 case "l3":
-                    p = L3(db,request.form)
+                    p = L3(request.form)
                     p.add()
                 case "conference":
-                    p = Conference(db,request.form)
+                    p = Conference(request.form)
                     p.add()
                 case "article":
-                    p = Article(db,request.form)
+                    p = Article(request.form)
                     p.add()
                 case _:
                     return apology("semthin went rowong")
             return redirect(request.referrer)
         except Erorro_in_inputs:
             return apology("Erorro in the inputs")
+
+@app.route("/edit_production", methods=["GET","POST"])
+@login_required
+def edit_production():
+    if request.method == "GET":
+        production = request.args.get("p") if request.args.get("p") else "polycopes"
+        if request.args.get("id"):
+            id = request.args.get("id") 
+        else:
+            raise ValueError
+        return render_template("edit_production.html", production = production, id =id)
+    else:
+        try:
+            match request.form.get("production"):
+                case "polycopes":
+                    Production.edit(Polycopes,request.form)
+                case "online_courses":
+                    Production.edit(OnlineCourses,request.form)
+                case "master":
+                    Production.edit(SupervisionMaster,request.form)
+                case "l3":
+                    Production.edit(SupervisionL3,request.form)
+                case "conference":
+                    Production.edit(Conferences,request.form)
+                case "article":
+                    Production.edit(Articles,request.form)
+                case _:
+                    return apology("semthin went rowong")
+            return redirect(request.referrer)
+        except Erorro_in_inputs:
+            return apology("Erorro in the inputs")
+        
+@app.route("/delete_production",methods=["GET","POST"])
+@login_required
+def delete_production():
+    
+    match request.form.get("production"):
+        case "polycopes":
+            Production.delete(Polycopes,request.form.get("id"))
+        case "online_courses":
+            Production.delete(OnlineCourses,request.form.get("id"))
+        case "master":
+            Production.delete(SupervisionMaster,request.form.get("id"))
+        case "l3":
+            Production.delete(SupervisionL3,request.form.get("id"))
+        case "conference":
+            Production.delete(Conferences,request.form.get("id"))
+        case "article":
+            Production.delete(Articles,request.form.get("id"))
+        case _:
+            return apology("semthin went rowong")
+    return redirect(request.referrer)
 
 '''
  -------------------------------
@@ -176,8 +281,19 @@ def add_production():
 @login_required
 def teacher_dashboard():
     
-    return render_template("teacher_dashboard.html")
+    return render_template("dashboard_t.html")
 
+@app.route("/teacher_dashboard")
+@login_required
+def teacher_dashboard():
+    
+    return render_template("dashboard_t.html")
+
+@app.route("/teachers_profile")
+@login_required
+def teachers_profile():
+    
+    return render_template("teachers_profile.html",username = Teachers.query.filter(Teachers.id == session.get("user_id")).with_entities(Teachers.username).first().username)
 '''
 login / logout
 
@@ -218,5 +334,5 @@ def logout():
     session.clear()
     return redirect("/")
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     app.run(debug=True)

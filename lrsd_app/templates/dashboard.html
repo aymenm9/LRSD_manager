@@ -1,0 +1,54 @@
+{% extends "admin_dashboard.html" %}
+{% block stat %}active{% endblock %}
+{% block body %}
+<div class="container-md ">
+    <div class="row text-center mb-5 ">
+        <h2>add admin </h2>
+        <form action="/add_admin" method="post">
+            <div class="input-group mb-3 ">
+                <span class="input-group-text bg-primary  text-light " id="un">user name</span>
+                <input type="text" name="username" id="username" class="form-control "
+                    placeholder="Enter username" aria-label="un" aria-describedby="admin user name">
+
+            </div>
+            <div class="input-group mb-3 ">
+                <span class="input-group-text bg-primary  text-light " id="em">email</span>
+                <input type="email" name="email" id="email" class="form-control "
+                    placeholder="Enter email(optionl)" aria-label="em" aria-describedby="admin email optionl">
+
+            </div>
+            <div class="input-group mb-3 ">
+                <span class="input-group-text bg-primary  text-light " id="ps" id="ps">password</span>
+                <input type="password" name="password" id="password" class="form-control "
+                    placeholder="Enter password" aria-label="ps" aria-describedby="admin password">
+
+            </div>
+            <button type="submit" class="btn btn-primary">ADD admin</button>
+        </form>
+    </div>
+    <div class="row text-center mb-5">
+        <h2>add department </h2>
+        <form action="/add_department" method="post">
+            <div class="input-group mb-3 ">
+                <span class="input-group-text bg-primary  text-light " id="un">department name</span>
+                <input type="text" name="name" id="name" class="form-control "
+                    placeholder="Enter department name" aria-label="un" aria-describedby="department name">
+            </div>
+            
+            <button type="submit" class="btn btn-primary">ADD department</button>
+        </form>
+    </div>
+    <div class="row text-center mb-5">
+        <h2>add grade </h2>
+        <form action="/add_grade" method="post">
+            <div class="input-group mb-3 ">
+                <span class="input-group-text bg-primary  text-light " id="g">grade name</span>
+                <input type="text" name="grade" id="grade" class="form-control "
+                    placeholder="Enter grade name" aria-label="g" aria-describedby="grade name">
+            </div>
+            
+            <button type="submit" class="btn btn-primary">ADD grade</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

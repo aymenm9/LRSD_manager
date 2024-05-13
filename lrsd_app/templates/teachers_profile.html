@@ -1,0 +1,16 @@
+{% extends "teacher_dashboard.html" %}
+{% block tech %}active{% endblock %}
+{% block body %}
+
+<div id="profile">
+
+</div>
+<script>
+    async function get_html(url, id, args = "") {
+        let response = await fetch(url + args);
+        const elem = document.getElementById(id);
+        elem.innerHTML = await response.text();
+    }
+    get_html("/profile","profile","?user={{username}}");
+</script>
+{% endblock %}

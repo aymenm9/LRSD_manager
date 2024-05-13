@@ -2,41 +2,17 @@
 {% block tech %}active{% endblock %}
 {% block body %}
 <div>
-    <div class="input-group my-3 pb-3"><input type="search" placeholder="enter the name or username of the teacher"
+    <!--<div class="input-group my-3 pb-3"><input type="search" placeholder="enter the name or username of the teacher"
             class="form-control " id="search"><button type="button"
             class="input-group-text btn-primary  " id="search_btn">Search</button></div>
-    <div class="container-sm " id="list"> </div>
+
 
     <div class="text-center "><button type="button" id="all" class="btn btn-link mt-2 ">view all</button></div>
-
-
-    <Script>
-        async function get_html(url,id,args = "") {
-            let response = await fetch(url+args);
-            const elem = document.getElementById(id);
-            elem.innerHTML = await response.text();
-            console.log("qdefeefez");
-            }
-        get_html("/teachers","list");
-        const all = document.getElementById("all");
-        all.addEventListener("click",function(){
-            if(all.innerText == "view all"){
-                all.innerText = "view less";
-                get_html("/teachers","list");
-            }
-            else{
-                all.innerText = "view all";
-                get_html("/teachers","list","?l=3");
-            }
-        });
-        const searchBtn = document.getElementById("search_btn");
-        const searchInp = document.getElementById("search");
-        [searchBtn, searchInp].forEach(search => search.addEventListener("input",function(){
-            get_html("/teachers","list","?q="+search.value);
-            all.innerText = "Cancel";
-        }));
-
+-->
+    <div class="container-sm " id="list"> </div>
+    <Script src="/static/teachers.js">
     </Script>
+
     <p class="lead text-center mt-4 ">
         <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#addteacher"
             aria-expanded="false" aria-controls="addteacher">
@@ -51,7 +27,7 @@
                     <div class="input-group mb-3 ">
                         <span class="input-group-text bg-primary  text-light " id="un">user name</span>
                         <input type="text" name="username" id="username" class="form-control "
-                            placeholder="Enter username" aria-label="un" aria-describedby="teacher user name">
+                            placeholder="Enter username" aria-label="un" aria-describedby="teacher user name" required>
                     </div>
 
                     <div class="input-group mb-3 ">
@@ -73,12 +49,12 @@
                     <div class="input-group mb-3 ">
                         <span class="input-group-text bg-primary  text-light " id="ps" id="ps">password</span>
                         <input type="password" name="password" id="password" class="form-control "
-                            placeholder="Enter password" aria-label="ps" aria-describedby="teacher password">
+                            placeholder="Enter password" aria-label="ps" aria-describedby="teacher password" required>
                     </div>
 
                     <div class="input-group mb-3 ">
 
-                        <select name="department" id="department" class="form-select">
+                        <select name="department" id="department" class="form-select" required>
                             <option disabled selected>department</option>
                             {% for department in departments %}
                             <option value="{{department.id}}">{{department.name}}</option>

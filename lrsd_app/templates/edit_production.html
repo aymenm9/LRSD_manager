@@ -1,0 +1,176 @@
+<form action="/edit_production" method="post" id="edit_production_form">
+
+    <input type="hidden" name="production_id" value="{{id}}">
+    <input type="hidden" name="production" value="{{production}}">
+
+    {% if production == "polycopes"%}
+    <!--polycope -->
+    <div id="polycope">
+        <!-- title -->
+        <div class="mb-3" id="d_title">
+            <label for="title" class="form-label">Title</label>
+            <input class="form-control" type="text" id="title" name="title">
+        </div>
+
+        <!-- pages -->
+        <div class="mb-3" id="d_pages">
+            <label for="pages" class="form-label">nuber of pages</label>
+            <input class="form-control" type="number" id="pages" name="pages">
+        </div>
+
+        <!-- type -->
+        <div class="mb-3" id="d_type">
+            <label for="type" class="form-label">Type</label>
+            <select class="form-select" aria-label="type" name="type">
+                <option selected disabled value="">Type</option>
+                <option value="td">TD</option>
+                <option value="tp">TP</option>
+                <option value="cour">Cour</option>
+            </select>
+        </div>
+        <!-- date -->
+        <div class="mb-3" id="d_date">
+            <label for="date" class="form-label">Title</label>
+            <input class="form-control" type="date" id="date" value="" name="date">
+        </div>
+    </div>
+    {% elif production == "online_courses" %}
+    <!-- online course -->
+    <div id="online_course">
+        <!-- title -->
+        <div class="mb-3" id="d_title">
+            <label for="title" class="form-label">Title</label>
+            <input class="form-control" type="text" id="title" name="title">
+        </div>
+
+        <!-- url -->
+        <div class="mb-3" id="d_url">
+            <label for="url" class="form-label">Url</label>
+            <input class="form-control" type="url" id="url" name="url">
+        </div>
+
+        <!-- date -->
+        <div class="mb-3" id="d_date">
+            <label for="date" class="form-label">Date</label>
+            <input class="form-control" type="date" id="date" name="date">
+        </div>
+    </div>
+
+    {% elif production == "master" %}
+    <!-- master -->
+    <div id="master">
+        <!-- subject -->
+        <div class="mb-3" id="d_subject">
+            <label for="subject" class="form-label">Subject</label>
+            <input class="form-control" type="text" id="subject" name="subject">
+        </div>
+
+        <!-- binome 1 -->
+        <div class="mb-3" id="d_binome_1">
+            <label for="binome_1" class="form-label">Binome 1</label>
+            <input class="form-control" type="text" id="binome_1" name="binome_1">
+        </div>
+
+        <!-- binome 2 -->
+        <div class="mb-3" id="d_binome_2">
+            <label for="binome_2" class="form-label">Binome 2</label>
+            <input class="form-control" type="text" id="binome_2" name="binome_2">
+        </div>
+
+        <!-- graduation date -->
+        <div class="mb-3" id="d_graduation_date">
+            <label for="graduation_date" class="form-label">Graduation Date</label>
+            <input class="form-control" type="date" id="graduation_date" name="graduation_date">
+        </div>
+    </div>
+
+    {% elif production == "l3" %}
+    <!-- l3 -->
+    <div id="l3">
+        <!-- subject -->
+        <div class="mb-3" id="d_subject">
+            <label for="subject" class="form-label">Subject</label>
+            <input class="form-control" type="text" id="subject" name="subject">
+        </div>
+
+        <!-- binome 1 -->
+        <div class="mb-3" id="d_binome_1">
+            <label for="binome_1" class="form-label">Binome 1</label>
+            <input class="form-control" type="text" id="binome_1" name="binome_1">
+        </div>
+
+        <!-- binome 2 -->
+        <div class="mb-3" id="d_binome_2">
+            <label for="binome_2" class="form-label">Binome 2</label>
+            <input class="form-control" type="text" id="binome_2" name="binome_2">
+        </div>
+    </div>
+    {% elif production == "conference" %}
+    <!-- conference -->
+    <div id="conference">
+      <!-- name -->
+      <div class="mb-3" id="d_name">
+        <label for="name" class="form-label">Name</label>
+        <input class="form-control" type="text" id="name" name="name">
+      </div>
+  
+      <!-- place -->
+      <div class="mb-3" id="d_place">
+        <label for="place" class="form-label">Place</label>
+        <input class="form-control" type="text" id="place" name="place">
+      </div>
+  
+      <!-- date -->
+      <div class="mb-3" id="d_date">
+        <label for="date" class="form-label">Date</label>
+        <input class="form-control" type="date" id="date" name="date">
+      </div>
+  
+      <!-- assistants -->
+      <div class="mb-3" id="d_assistants">
+        <label for="assistants" class="form-label">Assistants</label>
+        <input class="form-control" type="text" id="assistants" name="assistants"  placeholder="assistant, assistant,...">
+      </div>
+  
+      <!-- interventions -->
+      <div class="mb-3" id="d_interventions">
+        <label for="interventions" class="form-label">Interventions</label>
+        <input class="form-control" type="text" id="interventions" name="interventions" placeholder="intervention, intervention,...">
+  
+      </div>
+    </div>
+    {% elif production == "article" %}
+    <!-- article -->
+    <div id="article">
+      <!-- title -->
+      <div class="mb-3" id="d_title">
+        <label for="title" class="form-label">Title</label>
+        <input class="form-control" type="text" id="title" name="title">
+      </div>
+  
+      <!-- date -->
+      <div class="mb-3" id="d_date">
+        <label for="date" class="form-label">Date</label>
+        <input class="form-control" type="date" id="date" name="date" >
+      </div>
+  
+      <!-- pages -->
+      <div class="mb-3" id="d_pages">
+        <label for="pages" class="form-label">Pages</label>
+        <input class="form-control" type="number" id="pages" name="pages">
+      </div>
+  
+      <!-- journal -->
+      <div class="mb-3" id="d_journal">
+        <label for="journal" class="form-label">Journal</label>
+        <input class="form-control" type="text" id="journal" name="journal">
+      </div>
+  
+      <!-- Coauthors -->
+      <div class="mb-3" id="d_coauthors">
+        <label for="interventions" class="form-label">coauthors</label>
+        <input class="form-control" type="text" id="coauthors" name="coauthors" placeholder="coauthor, coauthor, ...">
+    </div>
+    {% endif %}
+    <button class="btn btn-primary " id="form_btn" type="submit">Edit production</button>
+</form>

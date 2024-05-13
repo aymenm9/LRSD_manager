@@ -1,4 +1,5 @@
-{% extends "admin_dashboard.html" %}
+{% if user == "admin"%}
+{% extends "admin_dashboard.html" %}{%else%}{% extends "teacher_dashboard.html" %}{%endif%}
 {% block prod %}active{% endblock %}
 {% block body %}
 <div>
@@ -67,29 +68,7 @@
         </div>
     </div>
 
-
-
-    <!-- search for a production -->
-    <div class="input-group my-3 pb-3"><input type="search" placeholder="enter the name of the production"
-            class="form-control " id="search"><button type="button" class="input-group-text btn-primary  "
-            id="search_btn">Search</button></div>
-    <div class="container-sm " id="list"> </div>
-
-
-    <!-- vew list of production -->
-    <div class="text-center "><button type="button" id="all" class="btn btn-link mt-2 ">view all</button></div>
-    <!-- to be change for production in sted of techers -->
-    <!--<Script>
-        async function get_html(url, id, args = "") {
-            let response = await fetch(url + args);
-            const elem = document.getElementById(id);
-            elem.innerHTML = await response.text();
-            console.log("qdefeefez");
-        }
-
-
-    </Script>-->
-
-
+    <div id="production_list"></div>
     <Script src="/static/production.js"></Script>
+
 </div>{% endblock %}

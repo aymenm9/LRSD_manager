@@ -35,18 +35,3 @@ def login_admin(f):
 
     return decorated_function
 
-def login_u(user_class,username, password):
-    """sumary_line
-            login function 
-        Keyword arguments: user class , username , password
-        argument -- user : Admin or Teatchers
-        Return: user or raise Password_or_username_none or Pass_user_incorrect
-    """
-    if not (username and password):
-        raise Password_or_username_none()
-    if not (user := user_class.query.filter_by(username = username).first()):
-        raise Pass_user_incorrect({"username": True , "msg":"username is incorect!"})
-    if not check_password_hash(user.password_hash, password):
-        raise Pass_user_incorrect({"password": True , "msg":"password is incorect!"})
-    return user
-
