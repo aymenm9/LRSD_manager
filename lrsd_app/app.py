@@ -48,6 +48,18 @@ def add_admin():
         db.session.commit()
         return redirect("/")
 
+@app.route("/delete_admin", methods=["GET", "POST"])
+@login_admin
+def delete_admin():
+    if request.method == "GET":
+        return redirect("/")
+    else:
+        username = request.form.get("user_name")
+        new_admin = Admin.query.filter(Admin.username == username).first()
+        db.session.delete(new_admin)
+        db.session.commit()
+        return redirect("/")
+
 @app.route("/add_department", methods=["GET", "POST"])
 @login_admin
 def add_department():
@@ -59,6 +71,18 @@ def add_department():
         db.session.add(new_department)
         db.session.commit()
         return redirect("/")
+@app.route("/delete_department", methods=["GET", "POST"])
+@login_admin
+def delete_department():
+    if request.method == "GET":
+        return redirect("/")
+    else:
+        id = request.form.get("id")
+        department = Departments.query.filter(Departments.id == id)
+        db.session.delete(department)
+        db.session.commit()
+        return redirect("/")
+    
     
 @app.route("/add_grade", methods=["GET", "POST"])
 @login_admin
@@ -69,6 +93,18 @@ def add_grade():
         grade_ = request.form.get("grade")
         grade = Grade(grade = grade_)
         db.session.add(grade)
+        db.session.commit()
+        return redirect("/")
+    
+@app.route("/delete_grade", methods=["GET", "POST"])
+@login_admin
+def delete_grade():
+    if request.method == "GET":
+        return redirect("/")
+    else:
+        grade_ = request.form.get("grade")
+        grade = Grade.query.filter(Grade.grade == grade_)
+        db.session.delete(grade)
         db.session.commit()
         return redirect("/")
 
@@ -88,7 +124,7 @@ def add_grade():
 @login_required
 def admin_dashboard():
     
-    return render_template("dashboard.html")
+    return render_template("dashboard.html",departments = Departments.query.all(), grades = Grade.query.all(),admins =  Admin.query.all())
 
 '''
  -------------------------------
@@ -161,18 +197,17 @@ def profile():
 @app.route("/productions_list")
 @login_required
 def productions_list():
-    return render_template("production_list.html")
+    return render_template("production_list.html",user ="admin" if session.get("user_type") is Admin else "teacher" )
 
 @app.route("/productions")
 @login_required
 def productions():
     if session.get("user_type") is Teachers:
         query =Production.by_teacher(session.get("user_id"))
-        user = "teacher"
     else:
         query = Production.all()
-        user = "admin"
-    return render_template("productions.html", productions = query,user = user )
+        
+    return render_template("productions.html", productions = query)
 
 @app.route("/add_production", methods=["GET","POST"])
 @login_required
@@ -277,11 +312,7 @@ def delete_production():
 
 '''
 
-@app.route("/teacher_dashboard")
-@login_required
-def teacher_dashboard():
-    
-    return render_template("dashboard_t.html")
+
 
 @app.route("/teacher_dashboard")
 @login_required
