@@ -26,7 +26,7 @@
           <a class="navbar-brand" href="/guest">
             <img src="/static/logo.png" alt="Logo" width="100" class="d-inline-block align-text-top">
           </a>
-          <a class=" nav-item " href="/gueststat">
+          <a class=" nav-item btn btn-primary " href="/gueststat">
             Statistics
           </a>
         </div>
@@ -78,7 +78,7 @@
                 <p class="lead">Grade : {{ teacher.grade }}</p>
                 <p class="lead">Email : {% if teacher.email %}{{ teacher.email }}{% else %}None email{% endif %}</p>
                 <p class="lead">Department : {{ teacher.department }}</p>
-                <a href="/guest_profile?user={{teacher.username}}">view profile</a>
+                <a href="/guest_profile?user={{teacher.username}}" class="btn btn-primary ">view profile</a>
             </div>
           </div>{% endfor %}
         </div>

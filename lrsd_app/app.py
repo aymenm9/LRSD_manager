@@ -399,8 +399,8 @@ def login_admin():
     else:
         try:
             CAdmin(user_name=request.form.get("username"),password=request.form.get("password")).login()
-        except Password_or_username_none or Pass_user_incorrect as e:
-            return apology(e.error["msg"])
+        except :
+            return apology("somthin incorect")
 
         return redirect('/')
 
@@ -412,8 +412,8 @@ def login_teacher():
     else:
         try:
             Teacher(user_name=request.form.get("username"),password=request.form.get("password")).login()
-        except Password_or_username_none or Pass_user_incorrect as e:
-            return apology(e.error["msg"])
+        except:
+            return apology("somthin incorect")
         return redirect('/')
 
 
