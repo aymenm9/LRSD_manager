@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+      <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css">
+      <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+      <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+        <title>Guest</title>
+        <style>
+          .carousel-item img {
+              height: 500px;
+              object-fit: cover;
+              width: 100%;
+          }
+      </style>
+      </head>
+<body>
+
+    <nav class="navbar bg-dark ">
+        <div class="container-sm ">
+          <a class="navbar-brand" href="/guest">
+            <img src="/lrsd_app/static/logo.png" alt="Logo" width="100" class="d-inline-block align-text-top">
+          </a>
+        </div>
+      </nav>
+
+    <main>
+        <div class=" container-sm ">
+            <div class="row ">
+                <button type="button" class="btn btn-primary col-1 " data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    <i class="bi bi-funnel-fill me-3 "></i> Fileter
+                  </button>
+                  <a href="/" id="goBack"><i class="bi bi-x-circle-fill"></i></i><span class="h4">Back</span></a>
+                    <script>
+                        // Get the referrer URL from the browser's history
+                        var referrer = document.referrer;
+
+                        // Get the "Go Back" link element
+                        var goBackLink = document.getElementById('goBack');
+
+                        // Set the "href" attribute of the link to the referrer URL
+                        goBackLink.href = referrer;
+                    </script>
+                  
+                  <!-- Modal -->
+                  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h1 class="modal-title fs-5" id="exampleModalLabel">Fileter</h1>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body d-flex justify-content-around ">
+                            <div>
+                                <div class="dropdown">
+                                    <a class="btn btn-secondary dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                      teachers
+                                    </a>
+                                  
+                                    <ul class="dropdown-menu">
+                                        {% for teacher in teachers_l%}
+                                      <li><a class="dropdown-item" href="/statistic?dusername={{teacher.username}}">{{teacher.first_name}} {{teacher.last_name}}</a></li>
+                                        {% endfor %}
+                                    </ul>
+                                  </div>
+                            </div>
+                            <div>
+                                <div class="dropdown">
+                                    <a class="btn btn-secondary dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                      departments
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        {% for department in department_l%}
+                                      <li><a class="dropdown-item" href="/statistic?department={{department.id}}">{{department.name}}</a></li>
+                                        {% endfor %}
+                                    </ul>
+                                  </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+            </div>
+            <div class="row justify-content-around ">
+                <div class="col-12  col-sm-10 d-flex justify-content-around  flex-column ">
+                    <h2 class=" text-center mb-4">{% if f_d%}<b>{{f_d}}</b>{% else %}PRODUCTIONS{%endif%}</h2>
+                    <div class="container overflow-hidden text-center">
+                        <div class="row gx-5 justify-content-around  ">
+                            <div class="col-11  card shadow text-center px-0 mb-4 ">
+                                <div class=" card-header ">
+                                    <h3 class=" text-primary card-title  ">
+                                        <i class="bi bi-inboxes-fill"></i> Total Productions
+                                    </h3>
+                                </div>
+                                <div class=" card-body ">
+                                <h4 class="text-info">{{production.total}}</h4></div>
+                            </div>
+                            <div class="col-5 card shadow text-center px-0 mb-4 ">
+                                <div class=" card-header ">
+                                    <h4 class=" text-primary card-title  ">
+                                        Productions pedagogic
+                                    </h4>
+                                </div>
+                                <div class=" card-body ">
+                                <h4 class="text-info">{{production.pedagogic}}</h4></div>
+                            </div>
+                            <div class="col-5  card shadow text-center px-0 mb-4 ">
+                                <div class=" card-header ">
+                                    <h4 class=" text-primary card-title  ">
+                                        Productions Scientist
+                                    </h4>
+                                </div>
+                                <div class=" card-body ">
+                                <h4 class="text-info">{{production.scientist}}</h4></div>
+                            </div>
+                            <div class="col-11  card shadow text-center px-0 mb-4 justify-content-around align-content-center ">
+                                <div class="row pt-3">
+                                    {% for field in production %}
+                                    {% if field not in  ["total","pedagogic","scientist"]%}
+                                    <div class=" d-flex flex-column col-6 col-md-4">
+                                    <h5 class=" text-primary ">{{ field }}</h5>
+                                    <p class="lead text-info ">{{ production[field] }}</p>
+                                    </div>  
+                                    {% endif %}
+                                                              
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div class="col-11  card shadow text-center px-0 mb-4 ">
+                                <div class=" card-header ">
+                                    <h3 class=" text-primary card-title  ">
+                                        <i class="bi bi-person-lines-fill"></i> Best Teacher
+                                    </h3>
+                                </div>
+                                <div class=" card-body ">
+                                <h4 class="text-info"><a href="/profile?user={{best}}">{{best}}</a></h4></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% if not f_t%}
+            <div class="row justify-content-around mt-5">
+                <div class="col-10 d-flex justify-content-around  flex-column ">
+                    <h2 class=" text-center mb-4">TEACHERS</h2>
+                    <div class="container overflow-hidden text-center">
+                        <div class="row gx-5 justify-content-around  ">
+                            <div class="col-11  card shadow text-center px-0 mb-4 ">
+                                <div class=" card-header ">
+                                    <h3 class=" text-primary card-title  ">
+                                        <i class="bi bi-person-lines-fill"></i> Total Teachers
+                                    </h3>
+                                </div>
+                                <div class=" card-body ">
+                                <h4 class="text-info">{{teachers.total}}</h4></div>
+                            </div>
+                            {% if not f_d%}
+                            {% for department in departments%}
+                            <div class="col-5 card shadow text-center px-0 mb-4 ">
+                                <div class=" card-header ">
+                                    <h4 class=" text-primary card-title  ">
+                                        {{department.name}}
+                                    </h4>
+                                </div>
+                                <div class=" card-body ">
+                                <h4  class="text-info">Production:</h4>
+                                <p class="text-info">{{department.total}}</p>
+                                <h4  class="text-info">Best :</h4>
+                                <p class="text-info">
+                                    {% if department.best%}
+                                    <a href="/profile?user={{department.best}}">{{department.best}}</a>
+                                    {%else%}
+                                    {{department.best}}
+                                    {% endif %}
+                                </p></div>
+                            </div>
+                            {% endfor %}
+                            {% endif %}
+                    
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </main>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+    crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

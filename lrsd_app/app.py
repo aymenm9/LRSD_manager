@@ -353,6 +353,36 @@ def statistic():
 
 
 '''
+guest
+'''
+@app.route("/guest")
+def guest():
+    return render_template("guest.html", teachers = Teachers.query.all())
+
+
+@app.route("/gueststat")
+def gueststat():
+    production = Production.statistic(username = request.args.get("username"), department_id= request.args.get("department"))
+    teachers = Teacher.total(department_id=request.args.get("department"))
+    best = Teacher.best()
+    department = Department.statistic_d(department_id=request.args.get("department"))
+    return render_template("gueststat.html", production = production,best = best,teachers = teachers,teachers_l = Teachers.query.with_entities(Teachers.username,Teachers.first_name,Teachers.last_name),department_l =Departments.query.all() ,departments = department,f_t =request.args.get("username") , f_d = department[0]["name"] if request.args.get("department") else None , user ="admin" if session.get("user_type") is Admin else "teacher")
+
+
+@app.route("/guest_profile")
+def guest_profile():
+    
+    if request.args.get("user"):
+        if teacher := Teacher.teacher_profile(request.args.get("user")):
+            productions = Production.by_teachers(teacher["id"])
+            return render_template("guest_profile.html",teacher = teacher, productions = productions, edit = False)
+    
+    return apology("something go wrowng ")
+
+
+
+
+'''
 login / logout
 
 '''
