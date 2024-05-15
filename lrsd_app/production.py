@@ -1,6 +1,7 @@
 from models import Teachers, Polycopes, OnlineCourses , SupervisionMaster, SupervisionL3, Conferences, Articles, Intervention, ConferenceAssistants,Coauthor
 from abc import ABC,abstractmethod
 from exceptions import Not_user, Erorro_in_inputs
+from sqlalchemy import select
 from db import db
 
 class Production(ABC):
@@ -67,6 +68,7 @@ class Production(ABC):
     @staticmethod
     def by_teacher(id):
         productions = []
+        
         for inst in Production.__subclasses__():
             prods = inst.get_all_t(id)
             for prod in prods:
@@ -74,6 +76,50 @@ class Production(ABC):
                 prod["teacher"] = teacher.first_name + " "+teacher.last_name
                 productions.append(prod)
         return  productions
+    @staticmethod
+    def by_teachers(id):
+        productions = []
+        exclude_fields = {'teacher_id', 'id'}
+        for inst in Production.__subclasses__():
+            prods = inst.type().query.all()
+            for prod in prods:
+                prod_dict={}
+                for field in prod.__table__.columns.keys():
+                    if field not in exclude_fields:
+                        prod_dict[field.replace('_', ' ')] = getattr(prod, field)
+                prod_dict["types"]= inst.type(True)
+                productions.append(prod_dict)
+        return  productions
+
+    @staticmethod
+    def statistic(*,username = None, department_id = None):
+        statistic={
+            "total": 0,
+            "scientist":0,
+            "pedagogic":0,
+        }
+        if username:
+            teacher= Teachers.query.filter(Teachers.username == username).with_entities(Teachers.id).first()
+            teacher_id = teacher.id
+        else:
+            teacher_id= None
+        for inst in Production.__subclasses__():
+            stat = inst.type().query.with_entities(inst.type().id)
+            if teacher_id:
+                stat = stat.filter(inst.type().teacher_id == teacher_id)
+            if department_id:
+                teachers = Teachers.query.with_entities(Teachers.id).filter(Teachers.department_id == department_id).subquery()
+                teachers_select = select(teachers)
+                stat = stat.filter(inst.type().teacher_id.in_(teachers_select))
+            x = stat.count()
+            statistic[inst.type(True)] = x
+            statistic["total"] = statistic["total"] + x
+            if inst.type(True) in ["Conference","Article"]:
+                statistic["scientist"] = statistic["scientist"] + x
+            else:
+                statistic["pedagogic"] = statistic["pedagogic"] + x
+
+        return statistic
 
 
     @staticmethod
@@ -83,8 +129,8 @@ class Production(ABC):
 
             prods = inst.get_all()
             for prod in prods:
-                teacher = Teachers.query.filter(Teachers.id == prod["teacher"]).with_entities(Teachers.first_name, Teachers.last_name).first()
-                prod["teacher"] = teacher.first_name + " "+teacher.last_name
+                teacher = Teachers.query.filter(Teachers.id == prod["teacher"]).with_entities(Teachers.first_name, Teachers.last_name,Teachers.username).first()
+                prod["teacher"] =teacher.first_name + " "+teacher.last_name
                 productions.append(prod)
         return  productions
 
@@ -106,8 +152,10 @@ class Polycope(Production):
     def get_all_t(id):
         return [{"id": col.id, "title": col.title,"date":col.date,"teacher":col.teacher_id,"type":"polycopes"}
                  for col in Polycopes.query.filter(Polycopes.teacher_id == id).with_entities(Polycopes.id, Polycopes.title, Polycopes.date, Polycopes.teacher_id)]
-
     
+    @staticmethod
+    def type(st = None):
+        return "Polycope" if st else Polycopes
     
 class Online_course(Production):
     def __init__(self,par: dict, production=None):
@@ -128,6 +176,9 @@ class Online_course(Production):
     def get_all_t(id):
         return [{"id": col.id, "title": col.title,"date":col.date,"teacher":col.teacher_id,"type":"online_courses"}
             for col in OnlineCourses.query.with_entities(OnlineCourses.id ,OnlineCourses.title,OnlineCourses.date,OnlineCourses.teacher_id).filter(OnlineCourses.teacher_id == id)]    
+    @staticmethod
+    def type(st = None):
+        return "Online course" if st else OnlineCourses
 
 
 class Master(Production):
@@ -149,6 +200,9 @@ class Master(Production):
         return [{"id": col.id, "title": col.subject,"date":col.graduation_date,"teacher":col.teacher_id,"type":"master"}
             for col in SupervisionMaster.query.with_entities(SupervisionMaster.id ,SupervisionMaster.subject,SupervisionMaster.graduation_date,SupervisionMaster.teacher_id).filter(SupervisionMaster.teacher_id == id)]     
 
+    @staticmethod
+    def type(st = None):
+        return "Supervision Master" if st else SupervisionMaster
 
 class L3(Production):
     def __init__(self, par: dict, production=None):
@@ -168,7 +222,9 @@ class L3(Production):
     def get_all_t(id):
         return [{"id": col.id, "title": col.subject,"date":None,"teacher":col.teacher_id,"type":"l3"}
             for col in SupervisionL3.query.with_entities(SupervisionL3.id ,SupervisionL3.subject, SupervisionL3.teacher_id).filter(SupervisionL3.teacher_id == id)]   
-
+    @staticmethod
+    def type(st = None):
+        return "Supervision L3" if st else SupervisionL3
 
 class Extra(ABC):
     def __init__(self, names, production):
@@ -249,7 +305,11 @@ class Conference(Production):
     def get_all_t(id):
         return [{"id": col.id, "title": col.name,"date":col.date,"teacher":col.teacher_id,"type":"conference" }
             for col in Conferences.query.with_entities(Conferences.id ,Conferences.name,Conferences.date,Conferences.teacher_id).filter(Conferences.teacher_id == id)]    
-    
+
+    @staticmethod
+    def type(st = None):
+        return "Conference" if st else Conferences
+     
 class Article(Production):
     def __init__(self,   par: dict, production=None):
         super().__init__(  par, production)
@@ -276,3 +336,7 @@ class Article(Production):
     def get_all_t(id):
         return [{"id": col.id, "title": col.title,"date":col.date,"teacher":col.teacher_id,"type": "article"}
             for col in Articles.query.with_entities(Articles.id ,Articles.title,Articles.date,Articles.teacher_id).filter(Articles.teacher_id == id)]    
+
+    @staticmethod
+    def type(st = None):
+        return "Article" if st else Articles

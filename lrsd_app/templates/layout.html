@@ -27,12 +27,14 @@
           </a>
         </div>
         <nav class="nav flex-column nav-underline mt-5 ps-0 ps-md-3  " id="d_nav">
-          <a class="nav-link text-light lead {% block stat %}{% endblock %}" aria-current="page" href="/" id="dashbord"><i
+          <a class="nav-link text-light lead {% block dash %}{% endblock %}" aria-current="page" href="/" id="dashbord"><i
               class="bi bi-house-door-fill me-2 "></i><span class="d-none d-md-inline ">Dashbord</span></a>
           <a class="nav-link text-light lead {% block tech %}{% endblock %}" href="{% block user %}{% endblock %}" id="teacher"><i
               class="bi bi-person-fill me-2 "></i><span  class="d-none d-md-inline">{% block user_b %}{% endblock %}</span></a>
           <a class="nav-link text-light lead {% block prod %}{% endblock %}" href="/productions_list" id="productions"><i
               class="bi bi-inboxes-fill me-2"></i><span class="d-none d-md-inline ">Productions</span></a>
+            <a class="nav-link text-light lead {% block stat %}{% endblock %}" aria-current="page" href="/statistic" id="statistic"><i
+                class="bi bi-house-door-fill me-2 "></i><span class="d-none d-md-inline ">statistic</span></a>
           <button type="button" class=" btn bg-danger  nav-link text-light lead h5 mt-5" id="loguot_btn"
             data-bs-toggle="modal" data-bs-target="#logout"><i
               class="bi bi-box-arrow-right me-auto  me-md-3 "></i></i><span class="d-none d-md-inline">Logout</span></button>
@@ -56,8 +58,11 @@
         </nav>
       </div>
 
-  <main class="col  ">
-    {% block main %}{% endblock %}
+  <main class="col">
+    <div class=" container-fluid justify-content-center ">
+      {% block main %}{% endblock %}
+    </div>
+    
   </main>
 </div>
 </div>

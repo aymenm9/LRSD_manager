@@ -4,17 +4,18 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-      <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css">
-      <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
-      <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css">
+    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
         <title></title>
       </head>
       
 <body>
-    <div class="mb-5">
+    <div class="mb-5 container-sm ">
+        <div class=" d-flex justify-content-between ">
         <a href="/" id="goBack"><i class="bi bi-arrow-left-circle-fill p-3"></i><span class="h4">Back</span></a>
         <script>
             // Get the referrer URL from the browser's history
@@ -26,12 +27,60 @@
             // Set the "href" attribute of the link to the referrer URL
             goBackLink.href = referrer;
         </script>
+        <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas"
+        data-bs-target="#e{{teacher.id}}" aria-controls="e{{teacher.id}}">Edit</button>
+
+    <div class="offcanvas offcanvas-start" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1"
+        id="e{{teacher.id}}" aria-labelledby="offcanvasScrollingLabel">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Edit {{teacher.first_name}} {{teacher.last_name}} info</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas"
+                aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+            <p>insert only the new or the information you want to edit</p>
+            <form action="/edit_teacher" method="post">
+                <input type="hidden" name="id" value="{{teacher.id}}">
+                <div class="input-group mb-3 ">
+                    <span class="input-group-text bg-primary  text-light " id="un">user name</span>
+                    <input type="text" name="username" id="username" class="form-control " placeholder="Enter username"
+                    aria-label="un" aria-describedby="teacher user name">
+                </div>
+                
+                <div class="input-group mb-3 ">
+                    <span class="input-group-text bg-primary  text-light " id="fn">first name</span>
+                    <input type="text" name="first_name" id="first_name" class="form-control "
+                            placeholder="Enter first name" aria-label="fn" aria-describedby="teacher first name">
+                </div>
+                <div class="input-group mb-3 ">
+                    <span class="input-group-text bg-primary  text-light " id="ln">last name</span>
+                    <input type="text" name="last_name" id="first_name" class="form-control " placeholder="Enter last name"
+                        aria-label="ln" aria-describedby="teacher last name">
+                </div>
+                <div class="input-group mb-3 ">
+                    <span class="input-group-text bg-primary  text-light " id="em">email</span>
+                    <input type="email" name="email" id="email" class="form-control " placeholder="Enter email(optionl)"
+                            aria-label="em" aria-describedby="teacher email optionl">
+                </div>
+                
+                <div class="input-group mb-3 ">
+                    <span class="input-group-text bg-primary  text-light " id="ps" id="ps">password</span>
+                    <input type="password" name="password" id="password" class="form-control " placeholder="Enter password"
+                        aria-label="ps" aria-describedby="teacher password">
+                </div>
+               
+                <button type="submit" class="btn btn-primary ">edit</button>
+            </form>
+        </div>
+
+    </div>
+    </div>
     </div>
     <div class="container-sm">
         <div class="card">
             <div class="row card-header">
-                <div class="col-2"><img src="/static/user_img.png" class="rounded float-start w-100" alt=""></div>
-                <div class="col-4 d-flex flex-column">
+                <div class="col-5 mb-3 mb-sm-1  col-sm-3 col-md-2"><img src="/static/user_img.png" class="rounded float-start w-100" alt=""></div>
+                <div class="col-10 col-sm-6 col-md-4  d-flex flex-column">
                     <h3>{{ teacher.full_name }}</h3>
                     <p class="lead">Grade : {{ teacher.grade }}</p>
                     <p class="lead">Email : {% if teacher.email %}{{ teacher.email }}{% else %}None email{% endif %}</p>
@@ -42,9 +91,9 @@
                 {% for production in productions %}
                     
                     <div class="card col-10 col-md-5 mt-4 p-3">
-                        <h5>{{production.type}}</h5>
+                        <h5>{{production.types}}</h5>
                         {% for field in production %}
-                            {% if field != "type"%}
+                            {% if field != "types"%}
                             <p class="lead">{{ field }} : {{ production[field] }}</p>
                             {% endif %}
                         {% endfor %}
@@ -53,6 +102,10 @@
             </div>
         </div>
     </div>
-    
+ <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+crossorigin="anonymous"></script>   
 </body>
+
+
 </html>

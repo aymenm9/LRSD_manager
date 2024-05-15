@@ -1,0 +1,92 @@
+{% extends "admin_dashboard.html" %}
+{% block tech %}active{% endblock %}
+{% block body %}
+<div class="mb-5 container-sm ">
+    <div class=" d-flex justify-content-between ">
+    <a href="/" id="goBack"><i class="bi bi-arrow-left-circle-fill p-3"></i><span class="h4">Back</span></a>
+    <script>
+        // Get the referrer URL from the browser's history
+        var referrer = document.referrer;
+
+        // Get the "Go Back" link element
+        var goBackLink = document.getElementById('goBack');
+
+        // Set the "href" attribute of the link to the referrer URL
+        goBackLink.href = referrer;
+    </script>
+    <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas"
+    data-bs-target="#e{{teacher.id}}" aria-controls="e{{teacher.id}}">Edit</button>
+
+<div class="offcanvas offcanvas-start" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1"
+    id="e{{teacher.id}}" aria-labelledby="offcanvasScrollingLabel">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Edit {{teacher.first_name}} {{teacher.last_name}} info</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas"
+            aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+        <p>insert only the new or the information you want to edit</p>
+        <form action="/edit_teacher" method="post">
+            <input type="hidden" name="id" value="{{teacher.id}}">
+            <div class="input-group mb-3 ">
+                <span class="input-group-text bg-primary  text-light " id="un">user name</span>
+                <input type="text" name="username" id="username" class="form-control " placeholder="Enter username"
+                aria-label="un" aria-describedby="teacher user name">
+            </div>
+            
+            <div class="input-group mb-3 ">
+                <span class="input-group-text bg-primary  text-light " id="fn">first name</span>
+                <input type="text" name="first_name" id="first_name" class="form-control "
+                        placeholder="Enter first name" aria-label="fn" aria-describedby="teacher first name">
+            </div>
+            <div class="input-group mb-3 ">
+                <span class="input-group-text bg-primary  text-light " id="ln">last name</span>
+                <input type="text" name="last_name" id="first_name" class="form-control " placeholder="Enter last name"
+                    aria-label="ln" aria-describedby="teacher last name">
+            </div>
+            <div class="input-group mb-3 ">
+                <span class="input-group-text bg-primary  text-light " id="em">email</span>
+                <input type="email" name="email" id="email" class="form-control " placeholder="Enter email(optionl)"
+                        aria-label="em" aria-describedby="teacher email optionl">
+            </div>
+            
+            <div class="input-group mb-3 ">
+                <span class="input-group-text bg-primary  text-light " id="ps" id="ps">password</span>
+                <input type="password" name="password" id="password" class="form-control " placeholder="Enter password"
+                    aria-label="ps" aria-describedby="teacher password">
+            </div>
+           
+            <button type="submit" class="btn btn-primary ">edit</button>
+        </form>
+    </div>
+
+</div>
+</div>
+</div>
+<div class="container-sm">
+    <div class="card">
+        <div class="row card-header align-content-center  ">
+            <div class="col-5  mb-3 mb-sm-1 col-sm-3 col-md-2"><img src="/static/user_img.png" class="rounded float-start w-100" alt=""></div>
+            <div class="col-10 col-sm-6 col-md-4 d-flex flex-column">
+                <h3>{{ teacher.full_name }}</h3>
+                <p class="lead">Grade : {{ teacher.grade }}</p>
+                <p class="lead">Email : {% if teacher.email %}{{ teacher.email }}{% else %}None email{% endif %}</p>
+                <p class="lead">Department : {{ teacher.department }}</p>
+            </div>
+        </div>
+        <div class="card-body row justify-content-around">
+            {% for production in productions %}
+                
+                <div class="card col-10 col-md-5 mt-4 p-3">
+                    <h5>{{production.types}}</h5>
+                    {% for field in production %}
+                        {% if field != "types"%}
+                        <p class="lead">{{ field }} : {{ production[field] }}</p>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

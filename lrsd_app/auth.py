@@ -29,7 +29,7 @@ def login_admin(f):
 
     @wraps(f)
     def decorated_function(*args, **kwargs):
-        if session.get("user_id") is None or session.get("user_type") != "admin ":
+        if session.get("user_id") is None or session.get("user_type") is not Admin:
             return apology("you are not alloed to be hier")
         return f(*args, **kwargs)
 

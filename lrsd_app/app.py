@@ -1,4 +1,4 @@
-from flask import Flask , session, render_template, redirect , request, jsonify
+from flask import Flask , session, render_template, redirect , request
 from flask_session import Session
 from flask_sqlalchemy import SQLAlchemy
 from models import Admin, Teachers, Departments, Grade , Polycopes,OnlineCourses,SupervisionMaster,SupervisionL3,Conferences,Articles
@@ -6,9 +6,10 @@ from production import Polycope, Online_course, Master, L3, Conference, Article,
 from db import db
 from auth import login_required,login_admin
 from apology import apology
-from werkzeug.security import check_password_hash, generate_password_hash
+from werkzeug.security import generate_password_hash
 from exceptions import Password_or_username_none, Pass_user_incorrect, Erorro_in_inputs,Not_user
 from users import CAdmin, Teacher
+from department import Department
 # app config
 app = Flask(__name__)
 
@@ -78,7 +79,7 @@ def delete_department():
         return redirect("/")
     else:
         id = request.form.get("id")
-        department = Departments.query.filter(Departments.id == id)
+        department = Departments.query.filter(Departments.id == id).first()
         db.session.delete(department)
         db.session.commit()
         return redirect("/")
@@ -103,7 +104,7 @@ def delete_grade():
         return redirect("/")
     else:
         grade_ = request.form.get("grade")
-        grade = Grade.query.filter(Grade.grade == grade_)
+        grade = Grade.query.filter(Grade.grade == grade_).first()
         db.session.delete(grade)
         db.session.commit()
         return redirect("/")
@@ -180,12 +181,15 @@ def edit_teacher():
 
 @app.route("/profile")
 def profile():
+    
     if request.args.get("user"):
         if teacher := Teacher.teacher_profile(request.args.get("user")):
-            productions = Production.by_teacher(teacher["id"])
-            return render_template("profile.html",teacher = teacher, productions = productions)
+            productions = Production.by_teachers(teacher["id"])
+            return render_template("profile_a.html",teacher = teacher, productions = productions, edit = True) if session["user_type"] is Admin else render_template("profile.html",teacher = teacher, productions = productions, edit = True)
+            
     
     return apology("something go wrowng ")
+
 
 '''
  -------------------------------
@@ -318,13 +322,36 @@ def delete_production():
 @login_required
 def teacher_dashboard():
     
-    return render_template("dashboard_t.html")
+    return redirect("/teachers_profile")
 
 @app.route("/teachers_profile")
 @login_required
 def teachers_profile():
     
     return render_template("teachers_profile.html",username = Teachers.query.filter(Teachers.id == session.get("user_id")).with_entities(Teachers.username).first().username)
+
+
+'''
+ -------------------------------
+ *******************************
+
+        statistic
+
+ *******************************
+-------------------------------
+
+'''
+
+@app.route("/statistic")
+@login_required
+def statistic():
+    production = Production.statistic(username = request.args.get("username"), department_id= request.args.get("department"))
+    teachers = Teacher.total(department_id=request.args.get("department"))
+    best = Teacher.best()
+    department = Department.statistic_d(department_id=request.args.get("department"))
+    return render_template("statistic.html", production = production,best = best,teachers = teachers,teachers_l = Teachers.query.with_entities(Teachers.username,Teachers.first_name,Teachers.last_name),department_l =Departments.query.all() ,departments = department,f_t =request.args.get("username") , f_d = department[0]["name"] if request.args.get("department") else None , user ="admin" if session.get("user_type") is Admin else "teacher")
+
+
 '''
 login / logout
 

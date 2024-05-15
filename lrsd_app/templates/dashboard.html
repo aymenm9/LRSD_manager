@@ -1,5 +1,5 @@
 {% extends "admin_dashboard.html" %}
-{% block stat %}active{% endblock %}
+{% block dash %}active{% endblock %}
 {% block body %}
 <div class="container-md ">
     <div class="row text-center mb-5 justify-content-around ">
@@ -90,10 +90,10 @@
             <form action="/delete_grade" method="post">
                 <div class="input-group mb-3 ">
                     <span class="input-group-text bg-primary  text-light " id="un">chois grade</span>
-                    <select name="department_id" id="admin_user_name" required>
-                        <option disabled selected>department</option>
-                        {% for grade in grades%}
-                        <option value="{{grade.grade}}">{{grade.grade}}</option>
+                    <select name="grade" id="admin_user_name" required>
+                        <option disabled selected>grade</option>
+                        {% for _grade in grades%}
+                        <option value="{{_grade.grade}}">{{_grade.grade}}</option>
                         {% endfor %}
                     </select>
                 </div>

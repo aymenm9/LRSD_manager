@@ -4,6 +4,7 @@ from exceptions import Not_user, Erorro_in_inputs, Password_or_username_none, Pa
 from werkzeug.security import check_password_hash, generate_password_hash
 from flask import session
 from db import db
+from production import Production
 
 class User(ABC):
     def __init__(self,*,id = None, user_name = None, password = None) -> None:
@@ -94,4 +95,27 @@ class Teacher(User):
             return False
         else:
             return True
-            
+        
+    @staticmethod
+    def best(*, department_id = None):
+        
+        teachers =  Teachers.query.with_entities(Teachers.username)
+        if department_id:
+            teachers = teachers.filter(Teachers.department_id == department_id)
+        best = {}
+        for teacher in teachers:
+            best[teacher.username]=Production.statistic(username= teacher.username,department_id=department_id)["total"]
+
+        return max(best, key=best.get) if best else None 
+
+    @staticmethod
+    def total(*, department_id = None):
+        statistic = {
+            "total": 0,
+         }
+        teachers = Teachers.query.with_entities(Teachers.id)
+        if department_id:
+            teachers =  teachers.filter(Teachers.department_id == department_id)
+        statistic["total"] = teachers.count()
+        return statistic
+    

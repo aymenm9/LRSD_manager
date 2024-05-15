@@ -1,0 +1,156 @@
+{% if user == "admin"%}
+{% extends "admin_dashboard.html" %}{%else%}{% extends "teacher_dashboard.html" %}{%endif%}
+{% block stat %}active{% endblock %}
+{% block body %}
+<div class=" container-sm ">
+    <div class="row ">
+        <button type="button" class="btn btn-primary col-1 " data-bs-toggle="modal" data-bs-target="#exampleModal">
+            <i class="bi bi-funnel-fill me-3 "></i> Fileter
+          </button>
+          <a href="/statistic" class=" col-2 h1"><i class="bi bi-x-circle-fill"></i></a>
+          
+          <!-- Modal -->
+          <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h1 class="modal-title fs-5" id="exampleModalLabel">Fileter</h1>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body d-flex justify-content-around ">
+                    <div>
+                        <div class="dropdown">
+                            <a class="btn btn-secondary dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                              teachers
+                            </a>
+                          
+                            <ul class="dropdown-menu">
+                                {% for teacher in teachers_l%}
+                              <li><a class="dropdown-item" href="/statistic?dusername={{teacher.username}}">{{teacher.first_name}} {{teacher.last_name}}</a></li>
+                                {% endfor %}
+                            </ul>
+                          </div>
+                    </div>
+                    <div>
+                        <div class="dropdown">
+                            <a class="btn btn-secondary dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                              departments
+                            </a>
+                            <ul class="dropdown-menu">
+                                {% for department in department_l%}
+                              <li><a class="dropdown-item" href="/statistic?department={{department.id}}">{{department.name}}</a></li>
+                                {% endfor %}
+                            </ul>
+                          </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
+    </div>
+    <div class="row justify-content-around ">
+        <div class="col-12  col-sm-10 d-flex justify-content-around  flex-column ">
+            <h2 class=" text-center mb-4">{% if f_d%}<b>{{f_d}}</b>{% else %}PRODUCTIONS{%endif%}</h2>
+            <div class="container overflow-hidden text-center">
+                <div class="row gx-5 justify-content-around  ">
+                    <div class="col-11  card shadow text-center px-0 mb-4 ">
+                        <div class=" card-header ">
+                            <h3 class=" text-primary card-title  ">
+                                <i class="bi bi-inboxes-fill"></i> Total Productions
+                            </h3>
+                        </div>
+                        <div class=" card-body ">
+                        <h4 class="text-info">{{production.total}}</h4></div>
+                    </div>
+                    <div class="col-5 card shadow text-center px-0 mb-4 ">
+                        <div class=" card-header ">
+                            <h4 class=" text-primary card-title  ">
+                                Productions pedagogic
+                            </h4>
+                        </div>
+                        <div class=" card-body ">
+                        <h4 class="text-info">{{production.pedagogic}}</h4></div>
+                    </div>
+                    <div class="col-5  card shadow text-center px-0 mb-4 ">
+                        <div class=" card-header ">
+                            <h4 class=" text-primary card-title  ">
+                                Productions Scientist
+                            </h4>
+                        </div>
+                        <div class=" card-body ">
+                        <h4 class="text-info">{{production.scientist}}</h4></div>
+                    </div>
+                    <div class="col-11  card shadow text-center px-0 mb-4 justify-content-around align-content-center ">
+                        <div class="row pt-3">
+                            {% for field in production %}
+                            {% if field not in  ["total","pedagogic","scientist"]%}
+                            <div class=" d-flex flex-column col-6 col-md-4">
+                            <h5 class=" text-primary ">{{ field }}</h5>
+                            <p class="lead text-info ">{{ production[field] }}</p>
+                            </div>  
+                            {% endif %}
+                                                      
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="col-11  card shadow text-center px-0 mb-4 ">
+                        <div class=" card-header ">
+                            <h3 class=" text-primary card-title  ">
+                                <i class="bi bi-person-lines-fill"></i> Best Teacher
+                            </h3>
+                        </div>
+                        <div class=" card-body ">
+                        <h4 class="text-info"><a href="/profile?user={{best}}">{{best}}</a></h4></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% if not f_t%}
+    <div class="row justify-content-around mt-5">
+        <div class="col-10 d-flex justify-content-around  flex-column ">
+            <h2 class=" text-center mb-4">TEACHERS</h2>
+            <div class="container overflow-hidden text-center">
+                <div class="row gx-5 justify-content-around  ">
+                    <div class="col-11  card shadow text-center px-0 mb-4 ">
+                        <div class=" card-header ">
+                            <h3 class=" text-primary card-title  ">
+                                <i class="bi bi-person-lines-fill"></i> Total Teachers
+                            </h3>
+                        </div>
+                        <div class=" card-body ">
+                        <h4 class="text-info">{{teachers.total}}</h4></div>
+                    </div>
+                    {% if not f_d%}
+                    {% for department in departments%}
+                    <div class="col-5 card shadow text-center px-0 mb-4 ">
+                        <div class=" card-header ">
+                            <h4 class=" text-primary card-title  ">
+                                {{department.name}}
+                            </h4>
+                        </div>
+                        <div class=" card-body ">
+                        <h4  class="text-info">Production:</h4>
+                        <p class="text-info">{{department.total}}</p>
+                        <h4  class="text-info">Best :</h4>
+                        <p class="text-info">
+                            {% if department.best%}
+                            <a href="/profile?user={{department.best}}">{{department.best}}</a>
+                            {%else%}
+                            {{department.best}}
+                            {% endif %}
+                        </p></div>
+                    </div>
+                    {% endfor %}
+                    {% endif %}
+            
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
